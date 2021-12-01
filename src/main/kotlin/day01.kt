@@ -1,16 +1,14 @@
-fun day01_puzzle1() {
-    val input = listOf(
-        199,
-        200,
-        208,
-        210,
-        200,
-        207,
-        240,
-        269,
-        260,
-        263
-    )
-    val increments = input.windowed(2).filter { it[0] < it[1] }.size
+import java.lang.ClassLoader.getSystemResource
+import java.lang.Integer.parseInt
+
+fun day01Puzzle1() {
+    val increments = getSystemResource("day01_puzzle1_input.txt")
+        .readText()
+        .lines()
+        .filter { it.isNotBlank() }
+        .map { parseInt(it) }
+        .windowed(2)
+        .filter { it[0] < it[1] }
+        .size
     println("Day  1, Puzzle 1: $increments increments")
 }
