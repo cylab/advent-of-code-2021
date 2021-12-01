@@ -10,8 +10,8 @@ fun day01Puzzle2() {
 }
 
 private fun List<Int>.countIncrements(slidingWindow: Int = 1) = this
-    // since with the sliding window, all elements but the first and the last are overlapping, we can simplify this
-    // to just compare the first and the last element and skip the sum
+    // since with the sliding window, all elements but the first and the last are overlapping,
+    // we can simplify this to just compare the first and the last element and skip the sum
     .windowed(slidingWindow + 1)
     .filter { it.first() < it.last() }
     .size
