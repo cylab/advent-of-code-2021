@@ -16,10 +16,10 @@ fun day02Puzzle2() {
 
 private fun List<Pair<String, Int>>.combinedPosAndDepth() = this
     .fold(listOf(0, 0)) { (pos, depth), (dir, amount) ->
-        when(dir) {
+        when (dir) {
+            "forward" -> listOf(pos + amount, depth)
             "down" -> listOf(pos, depth + amount)
             "up" -> listOf(pos, depth - amount)
-            "forward" -> listOf(pos + amount, depth)
             else -> listOf(pos, depth) // ignore unknown directions
         }
     }
@@ -28,10 +28,10 @@ private fun List<Pair<String, Int>>.combinedPosAndDepth() = this
 
 private fun List<Pair<String, Int>>.combinedPosAndAim() = this
     .fold(listOf(0, 0, 0)) { (pos, depth, aim), (dir, amount) ->
-        when(dir) {
+        when (dir) {
+            "forward" -> listOf(pos + amount, depth + (aim * amount), aim)
             "down" -> listOf(pos, depth, aim + amount)
             "up" -> listOf(pos, depth, aim - amount)
-            "forward" -> listOf(pos + amount, depth + (aim * amount), aim)
             else -> listOf(pos, depth, aim) // ignore unknown directions
         }
     }
