@@ -1,6 +1,9 @@
 import java.lang.ClassLoader.getSystemResource
 import java.lang.Integer.parseInt
 
+private val day1Sample get() = parse("day01_sample.txt")
+private val day1Input get() = parse("day01_input.txt")
+
 fun day01Puzzle1() {
     println("Day  1, Puzzle 1: ${day1Input.countIncrements()} increments")
 }
@@ -16,7 +19,7 @@ private fun List<Int>.countIncrements(slidingWindow: Int = 1) = this
     .filter { it.first() < it.last() }
     .size
 
-private val day1Input get() = getSystemResource("day01_input.txt")
+private fun parse(resource: String) = getSystemResource(resource)
     .readText()
     .lines()
     .filter { it.isNotBlank() }
