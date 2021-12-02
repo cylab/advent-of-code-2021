@@ -1,5 +1,4 @@
 import java.lang.ClassLoader.getSystemResource
-import java.lang.Integer.parseInt
 
 private val day1Sample get() = parse("day01_sample.txt")
 private val day1Input get() = parse("day01_input.txt")
@@ -23,4 +22,4 @@ private fun parse(resource: String) = getSystemResource(resource)
     .readText()
     .lines()
     .filter { it.isNotBlank() }
-    .map { parseInt(it) }
+    .map { it.toInt() }
