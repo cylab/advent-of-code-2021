@@ -40,11 +40,9 @@ class Day3 {
 
 
     fun Input.gamma() = this
-        .fold(List(width) { 0f }) { acc, vals ->
-            acc.mapIndexed { i, it -> it + vals[i].toString().toInt() }
-        }
-        .map { v -> (v / size).roundToInt() }
-        .joinToString("").toInt(2)
+        .fold(List(width) { 0f }) { acc, line -> acc.mapIndexed { i, it -> it + line.slice(i..i).toInt() } }
+        .joinToString("") { (it / size).roundToInt().toString() }
+        .toInt(2)
 
     fun Input.epsilon(gamma: Int = gamma()) = gamma.xor((1 shl width) - 1)
 
@@ -55,8 +53,7 @@ class Day3 {
         return if (res.size == 1) res.first().toInt(2) else res.foldByBits(bitsFun, pos - 1)
     }
 
-
-    val Input.width get() = get(0).length
+    val Input.width get() = first().length
 
     fun parse(resource: String) = this.javaClass.getResource(resource)
         .readText()
