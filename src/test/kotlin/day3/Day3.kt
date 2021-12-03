@@ -49,10 +49,10 @@ class Day3 {
     fun Input.epsilon(gamma: Int = gamma()) = gamma.xor((1 shl width) - 1)
 
 
-    fun Input.foldByBits(bitsFun: Input.() -> Int, bitNum: Int = width - 1): Int {
+    fun Input.foldByBits(bitsFun: Input.() -> Int, pos: Int = width - 1): Int {
         val bits = bitsFun()
-        val result = filter { it.toInt(2).xor(bits).and(1 shl bitNum) == 0 }
-        return if (result.size == 1) result.first().toInt(2) else result.foldByBits(bitsFun, bitNum - 1)
+        val res = filter { it.toInt(2).xor(bits).and(1 shl pos) == 0 }
+        return if (res.size == 1) res.first().toInt(2) else res.foldByBits(bitsFun, pos - 1)
     }
 
 
