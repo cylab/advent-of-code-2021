@@ -41,8 +41,7 @@ class Day3 {
 
     fun Input.gamma() =
         fold(List(width) { 0f }) { acc, line -> acc.mapIndexed { i, it -> it + line.slice(i..i).toInt() } }
-            .joinToString("") { (it / size).roundToInt().toString() }
-            .toInt(2)
+            .foldIndexed(0) { i, acc, it -> acc + (it / size).roundToInt().shl(width - i - 1) }
 
     fun Input.epsilon(gamma: Int = gamma()) = gamma.xor((1 shl width) - 1)
 
