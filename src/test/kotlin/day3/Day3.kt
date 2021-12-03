@@ -39,22 +39,30 @@ class Day3 {
     fun Input.oxygenAndCO2() = Pair(findByBits({ gamma() }), findByBits({ epsilon() }))
 
 
-    fun Input.gamma() =
-        fold(List(width) { 0f }) { acc, line -> acc.mapIndexed { i, it -> it + line.slice(i..i).toInt() } }
-            .foldIndexed(0) { i, acc, it -> acc + (it / size).roundToInt().shl(width - i - 1) }
+    fun Input.gamma() = this
+        .fold(List(width) { 0f }) { acc, line ->
+            acc.mapIndexed { i, it -> it + line.slice(i..i).toInt() }
+        }
+        .foldIndexed(0) { i, acc, it ->
+            acc + (it / size).roundToInt().shl(width - i - 1)
+        }
 
     fun Input.epsilon(gamma: Int = gamma()) = gamma.xor((1 shl width) - 1)
 
 
     tailrec fun Input.findByBits(bitsFun: Input.() -> Int, pos: Int = width - 1): Int {
         val bits = bitsFun()
-        val res = filter { it.toInt(2).xor(bits).and(1 shl pos) == 0 }
-        return if (res.size == 1) res.first().toInt(2) else res.findByBits(bitsFun, pos - 1)
+        val mcbAtPos = filter { it.toInt(2).xor(bits).and(1 shl pos) == 0 }
+        return when (mcbAtPos.size == 1) {
+            true -> mcbAtPos.first().toInt(2)
+            else -> mcbAtPos.findByBits(bitsFun, pos - 1)
+        }
     }
 
     val Input.width get() = first().length
 
-    fun parse(resource: String) = this.javaClass.getResource(resource)
+    fun parse(resource: String) = this.javaClass
+        .getResource(resource)
         .readText()
         .lines()
         .filter { it.isNotBlank() }
