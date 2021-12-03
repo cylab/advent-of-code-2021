@@ -24,19 +24,19 @@ class Day3 {
 
     @Test
     fun puzzle2() {
-        sample.oxyAndCO2().let { (oxy, co2) ->
-            println("oxygen: $oxy, c02: $co2")
-            oxy * co2 shouldBe 230
+        sample.oxygenAndCO2().let { (oxygen, co2) ->
+            println("oxygen: $oxygen, c02: $co2")
+            oxygen * co2 shouldBe 230
         }
-        input.oxyAndCO2().let { (oxy, co2) ->
-            println("Day  3, Puzzle 2: ${oxy * co2} ratings")
+        input.oxygenAndCO2().let { (oxygen, co2) ->
+            println("Day  3, Puzzle 2: ${oxygen * co2} ratings")
         }
     }
 
 
     fun Input.gammaAndEpsilon() = gamma().let { Pair(it, epsilon(it)) }
 
-    fun Input.oxyAndCO2() = Pair(foldByBits({ gamma() }), foldByBits({ epsilon() }))
+    fun Input.oxygenAndCO2() = Pair(foldByBits({ gamma() }), foldByBits({ epsilon() }))
 
 
     fun Input.gamma() = this
