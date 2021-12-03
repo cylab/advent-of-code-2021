@@ -43,7 +43,8 @@ class Day3 {
         .fold(List(width) { 0f }) { acc, vals ->
             acc.mapIndexed { i, it -> it + vals[i].toString().toInt() }
         }
-        .let { it.map { v -> (v / size).roundToInt() }.joinToString("").toInt(2) }
+        .map { v -> (v / size).roundToInt() }
+        .joinToString("").toInt(2)
 
     fun Input.epsilon(gamma: Int = gamma()) = gamma.xor((1 shl width) - 1)
 
