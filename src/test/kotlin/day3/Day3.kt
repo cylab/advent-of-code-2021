@@ -13,12 +13,12 @@ class Day3 {
 
     @Test
     fun puzzle1() {
-        sample.gammaAndEpsilon().let { (gam, eps) ->
-            println("gamma: $gam, epsilon: $eps")
-            gam * eps shouldBe 198
+        sample.gammaAndEpsilon().let { (gamma, epsilon) ->
+            println("gamma: $gamma, epsilon: $epsilon")
+            gamma * epsilon shouldBe 198
         }
-        input.gammaAndEpsilon().let { (gam, eps) ->
-            println("Day  3, Puzzle 1: ${gam * eps} ratings")
+        input.gammaAndEpsilon().let { (gamma, epsilon) ->
+            println("Day  3, Puzzle 1: ${gamma * epsilon} ratings")
         }
     }
 
@@ -45,7 +45,7 @@ class Day3 {
         }
         .let { it.map { v -> (v / size).roundToInt() }.joinToString("").toInt(2) }
 
-    fun Input.epsilon(gam: Int = gamma()) = gam.xor((1 shl width) - 1)
+    fun Input.epsilon(gamma: Int = gamma()) = gamma.xor((1 shl width) - 1)
 
 
     fun Input.foldByBits(bitsFun: Input.() -> Int, bitNum: Int = width - 1): Int =
