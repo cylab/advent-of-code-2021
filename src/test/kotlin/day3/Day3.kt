@@ -39,10 +39,10 @@ class Day3 {
     fun Input.oxygenAndCO2() = Pair(foldByBits({ gamma() }), foldByBits({ epsilon() }))
 
 
-    fun Input.gamma() = this
-        .fold(List(width) { 0f }) { acc, line -> acc.mapIndexed { i, it -> it + line.slice(i..i).toInt() } }
-        .joinToString("") { (it / size).roundToInt().toString() }
-        .toInt(2)
+    fun Input.gamma() =
+        fold(List(width) { 0f }) { acc, line -> acc.mapIndexed { i, it -> it + line.slice(i..i).toInt() } }
+            .joinToString("") { (it / size).roundToInt().toString() }
+            .toInt(2)
 
     fun Input.epsilon(gamma: Int = gamma()) = gamma.xor((1 shl width) - 1)
 
