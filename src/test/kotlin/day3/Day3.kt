@@ -36,7 +36,10 @@ class Day3 {
 
     fun Input.gammaAndEpsilon() = gamma().let { Pair(it, epsilon(it)) }
 
-    fun Input.oxygenAndCO2() = Pair(findByBits({ gamma() }), findByBits({ epsilon() }))
+    fun Input.oxygenAndCO2() = Pair(
+        findByMostCommonBits({ gamma() }),
+        findByMostCommonBits({ epsilon() })
+    )
 
 
     fun Input.gamma() = this
@@ -50,12 +53,12 @@ class Day3 {
     fun Input.epsilon(gamma: Int = gamma()) = gamma.xor((1 shl width) - 1)
 
 
-    tailrec fun Input.findByBits(bitsFun: Input.() -> Int, pos: Int = width - 1): Int {
+    tailrec fun Input.findByMostCommonBits(bitsFun: Input.() -> Int, pos: Int = width - 1): Int {
         val bits = bitsFun()
         val mcbAtPos = filter { it.toInt(2).xor(bits).and(1 shl pos) == 0 }
         return when (mcbAtPos.size == 1) {
             true -> mcbAtPos.first().toInt(2)
-            else -> mcbAtPos.findByBits(bitsFun, pos - 1)
+            else -> mcbAtPos.findByMostCommonBits(bitsFun, pos - 1)
         }
     }
 
