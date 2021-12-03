@@ -36,18 +36,14 @@ class Day3 {
 
     fun Input.gammaAndEpsilon() = gamma().let { Pair(it, epsilon(it)) }
 
-    fun Input.oxyAndCO2() = Pair(
-        foldByBits({ gamma() }),
-        foldByBits({ epsilon() })
-    )
+    fun Input.oxyAndCO2() = Pair(foldByBits({ gamma() }), foldByBits({ epsilon() }))
+
 
     fun Input.gamma() = this
         .fold(List(width) { 0f }) { acc, vals ->
             acc.mapIndexed { i, it -> it + vals[i].toString().toInt() }
         }
-        .let {
-            it.map { v -> (v / size).roundToInt() }.joinToString("").toInt(2)
-        }
+        .let { it.map { v -> (v / size).roundToInt() }.joinToString("").toInt(2) }
 
     fun Input.epsilon(gam: Int = gamma()) = gam.xor((1 shl width) - 1)
 
