@@ -28,22 +28,22 @@ class Day4 {
         println("Day  4, Puzzle 2: ${input.wins().last().score()} score")
     }
 
+
     fun Input.wins() = boards.mapNotNull { it.winOrNull(numbers) }.sortedBy { it.drawn.size }
-
-    fun Win.score() = board.rows.flatten().filterNot { it in drawn }.sum().let { it * drawn.last() }
-
 
     fun Board.winOrNull(numbers: List<Int>) = numbers.indices.asSequence()
         .map { numbers.slice(0..it) }
         .firstOrNull { drawn -> rows.any { drawn.containsAll(it) } || cols.any { drawn.containsAll(it) } }
         ?.let { Win(this, it) }
 
+    fun Win.score() = board.rows.flatten().filterNot { it in drawn }.sum().let { it * drawn.last() }
+
 
     fun List<String>.createInput() = Input(first().extractInts(), drop(1).map { it.createBoard() })
 
-    fun String.extractInts() = trim().split(Regex("[,\\s]\\s*")).map { it.trim().toInt() }
-
     fun String.createBoard() = Board(lines().map { it.extractInts() })
+
+    fun String.extractInts() = trim().split(Regex("[,\\s]\\s*")).map { it.trim().toInt() }
 
     fun parse(resource: String) = this.javaClass
         .getResource(resource)
