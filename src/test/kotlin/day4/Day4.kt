@@ -38,6 +38,7 @@ class Day4 {
         .firstOrNull { drawn -> rows.any { drawn.containsAll(it) } || cols.any { drawn.containsAll(it) } }
         ?.let { Win(this, it) }
 
+
     fun List<String>.createInput() = Input(first().extractInts(), drop(1).map { it.createBoard() })
 
     fun String.extractInts() = trim().split(Regex("[,\\s]\\s*")).map { it.trim().toInt() }
