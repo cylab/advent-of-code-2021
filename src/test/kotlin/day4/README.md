@@ -66,7 +66,7 @@ The score of the winning board can now be calculated. Start by finding the sum o
 
 To guarantee victory against the giant squid, figure out which board will win first. What will your final score be if you choose that board?
 
-Your puzzle answer was 32844.
+Your puzzle answer was `32844`.
 
 The first half of this puzzle is complete! It provides one gold star: *
 ## --- Part Two ---
@@ -78,3 +78,5 @@ You aren't sure how many bingo boards a giant squid could play at once, so rathe
 In the above example, the second board is the last to win, which happens after 13 is eventually called and its middle column is completely marked. If you were to keep playing until this point, the second board would have a sum of unmarked numbers equal to 148 for a final score of 148 * 13 = 1924.
 
 Figure out which board will win last. Once it wins, what would its final score be?
+
+Your puzzle answer was `4920`.
