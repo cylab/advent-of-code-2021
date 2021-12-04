@@ -6,7 +6,11 @@ import org.junit.jupiter.api.Test
 class Day4 {
 
     data class Input(val numbers: List<Int>, val boards: List<Board>)
-    data class Board(val rows: List<List<Int>>)
+    data class Board(
+        val rows: List<List<Int>>,
+        val cols: List<List<Int>> = rows.first().indices.map { i -> rows.map { it[i] } }
+    )
+
     data class Win(val board: Board, val drawn: List<Int> = emptyList())
 
     val sample = parse("sample.txt")
@@ -28,25 +32,11 @@ class Day4 {
 
     fun Win.score() = board.rows.flatten().filterNot { it in drawn }.sum().let { it * drawn.last() }
 
-    fun Board.winOrNull(numbers: List<Int>): Win? {
-        val width = rows.size
-        val markedRows = MutableList(width) { 0 }
-        val markedCols = MutableList(width) { 0 }
-        numbers.forEachIndexed { n, num ->
-            rows.forEachIndexed { r, row ->
-                row.forEachIndexed { c, col ->
-                    if (num == col) {
-                        markedRows[r] += 1
-                        markedCols[c] += 1
-                        if (markedRows[r] == width || markedCols[c] == width) {
-                            return Win(this, numbers.slice(0..n))
-                        }
-                    }
-                }
-            }
-        }
-        return null
-    }
+
+    fun Board.winOrNull(numbers: List<Int>) = numbers.indices.asSequence()
+        .map { numbers.slice(0..it) }
+        .firstOrNull { drawn -> rows.any { drawn.containsAll(it) } || cols.any { drawn.containsAll(it) } }
+        ?.let { Win(this, it) }
 
     fun List<String>.createInput() = Input(first().extractInts(), drop(1).map { it.createBoard() })
 
