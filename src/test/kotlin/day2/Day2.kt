@@ -11,18 +11,18 @@ class Day2 {
 
     @Test
     fun puzzle1() {
-        sample.combinedPosAndDepth() shouldBe 150
-        println("Day  2, Puzzle 1: ${input.combinedPosAndDepth()} combined steering")
+        sample.posAndDepth() shouldBe 150
+        println("Day  2, Puzzle 1: ${input.posAndDepth()} combined steering")
     }
 
     @Test
     fun puzzle2() {
-        sample.combinedPosAndAim() shouldBe 900
-        println("Day  2, Puzzle 2: ${input.combinedPosAndAim()} combined steering")
+        sample.posAndAim() shouldBe 900
+        println("Day  2, Puzzle 2: ${input.posAndAim()} combined steering")
     }
 
 
-    fun Input.combinedPosAndDepth() = this
+    fun Input.posAndDepth() = this
         .fold(listOf(0, 0)) { (pos, depth), (dir, amount) ->
             when (dir) {
                 "forward" -> listOf(pos + amount, depth)
@@ -34,7 +34,7 @@ class Day2 {
         .let { (pos, depth) -> pos * depth }
 
 
-    fun Input.combinedPosAndAim() = this
+    fun Input.posAndAim() = this
         .fold(listOf(0, 0, 0)) { (pos, depth, aim), (dir, amount) ->
             when (dir) {
                 "forward" -> listOf(pos + amount, depth + (aim * amount), aim)

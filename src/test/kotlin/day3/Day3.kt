@@ -13,33 +13,20 @@ class Day3 {
 
     @Test
     fun puzzle1() {
-        sample.gammaAndEpsilon().let { (gamma, epsilon) ->
-            println("gamma: $gamma, epsilon: $epsilon")
-            gamma * epsilon shouldBe 198
-        }
-        input.gammaAndEpsilon().let { (gamma, epsilon) ->
-            println("Day  3, Puzzle 1: ${gamma * epsilon} ratings")
-        }
+        sample.gammaAndEpsilon() shouldBe 198
+        println("Day  3, Puzzle 1: ${input.gammaAndEpsilon()} ratings")
     }
 
     @Test
     fun puzzle2() {
-        sample.oxygenAndCO2().let { (oxygen, co2) ->
-            println("oxygen: $oxygen, c02: $co2")
-            oxygen * co2 shouldBe 230
-        }
-        input.oxygenAndCO2().let { (oxygen, co2) ->
-            println("Day  3, Puzzle 2: ${oxygen * co2} ratings")
-        }
+        sample.oxygenAndCO2() shouldBe 230
+        println("Day  3, Puzzle 2: ${input.oxygenAndCO2()} ratings")
     }
 
 
-    fun Input.gammaAndEpsilon() = gamma().let { Pair(it, epsilon(it)) }
+    fun Input.gammaAndEpsilon() = gamma().let { it * epsilon(it) }
 
-    fun Input.oxygenAndCO2() = Pair(
-        findByBits({ gamma() }),
-        findByBits({ epsilon() })
-    )
+    fun Input.oxygenAndCO2() = findByBits({ gamma() }) * findByBits({ epsilon() })
 
 
     fun Input.gamma() = this
