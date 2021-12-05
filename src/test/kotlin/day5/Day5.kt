@@ -8,7 +8,7 @@ import kotlin.math.max
 
 class Day5 {
 
-    data class Input(val lines: List<Line>, val straights: List<Line> = lines.filter { it.straight })
+    data class Input(val lines: List<Line>)
     data class Line(val points: List<Pair<Int, Int>>, val straight: Boolean)
 
     val sample = parse("sample.txt")
@@ -16,8 +16,8 @@ class Day5 {
 
     @Test
     fun puzzle1() {
-        sample.straights.overlaps() shouldBe 5
-        println("Day  5, Puzzle 1: ${input.straights.overlaps()} overlaps")
+        sample.lines.filter { it.straight }.overlaps() shouldBe 5
+        println("Day  5, Puzzle 1: ${input.lines.filter { it.straight }.overlaps()} overlaps")
     }
 
     @Test
