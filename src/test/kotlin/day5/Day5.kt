@@ -23,7 +23,7 @@ class Day5 {
     @Test
     fun puzzle2() {
         sample.lines.overlaps() shouldBe 12
-        println("Day  5, Puzzle 2: ${input.lines.overlaps()} score")
+        println("Day  5, Puzzle 2: ${input.lines.overlaps()} overlaps")
     }
 
     fun List<Line>.overlaps() = flatMap { it.points }.groupBy { it }.filter { it.value.size >= 2 }.size
