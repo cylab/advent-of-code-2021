@@ -25,7 +25,10 @@ class Day5 {
         println("Day  5, Puzzle 2: ${input.overlaps()} overlaps")
     }
 
-    fun List<Line>.overlaps() = flatMap { it.points }.groupBy { it }.filter { it.value.size >= 2 }.size
+    fun List<Line>.overlaps() = flatMap { it.points }
+        .groupBy { it }
+        .filter { it.value.size >= 2 }
+        .size
 
     fun String.createLine() = trim()
         .split(Regex("\\D+"))
