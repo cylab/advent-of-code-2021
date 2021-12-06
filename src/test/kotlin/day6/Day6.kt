@@ -24,8 +24,8 @@ class Day6 {
 
     // modified iterative fibonacci
     fun Int.withOffspring(days: Int) = (1..days - this)
-        .fold(listOf(1L) + List(8) { 0L }) { sea, _ ->
-            sea.slice(1..6) + (sea[7] + sea.first()) + sea.last() + sea.first()
+        .fold(listOf(1L) + List(8) { 0L }) { cycle, _ ->
+            cycle.slice(1..6) + (cycle[7] + cycle.first()) + cycle.last() + cycle.first()
         }
         .sum()
 
