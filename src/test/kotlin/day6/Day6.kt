@@ -12,28 +12,34 @@ class Day6 {
     @Test
     fun puzzle1() {
         sample.population(days = 80) shouldBe 5934
+        sample.population_mutable(days = 80) shouldBe 5934
         println("Day  6, Puzzle 1: ${input.population(days = 80)} laternfish")
     }
 
     @Test
     fun puzzle2() {
         sample.population(days = 256) shouldBe 26984457539
+        sample.population_mutable(days = 256) shouldBe 26984457539
         println("Day  6, Puzzle 2: ${input.population(days = 256)} laternfish")
     }
 
-    fun List<Int>.population(days: Int) = map { withOffspring_mutable(it, days) }.sum()
-
     // modified iterative fibonacci with immutable data structures
-    fun withOffspring(dueIn: Int, days: Int) = (1..days - dueIn)
-        .fold(listOf(1L) + List(8) { 0L }) { cycle, _ ->
-            cycle.slice(1..6) + (cycle[7] + cycle.first()) + cycle.last() + cycle.first()
+    fun List<Int>.population(days: Int) = this
+        .fold(List(9) { 0L }) { initial, dueIn ->
+            initial.mapIndexed { i, fish -> if (i == dueIn) fish + 1L else fish }
         }
+        .let { withOffspring(it, days) }
         .sum()
 
+    fun withOffspring(initial: List<Long>, days: Int) = (1..days).fold(initial) { cycle, _ ->
+        cycle.slice(1..6) + (cycle[7] + cycle.first()) + cycle.last() + cycle.first()
+    }
+
     // the mutable variant is easier to understand and probably much faster
-    fun withOffspring_mutable(dueIn: Int, days: Int): Long {
-        val cycle = MutableList(9) { 0L }.also { it[0] = 1 }
-        repeat(days - dueIn) {
+    fun List<Int>.population_mutable(days: Int): Long {
+        val cycle = MutableList(9) { 0L }
+        map { dueIn -> cycle[dueIn] += 1L }
+        repeat(days) {
             cycle[7] += cycle.first()
             rotate(cycle, -1)
         }
