@@ -37,8 +37,8 @@ class Day7 {
         val dir = signum(fuelN0 - fuelN1)
 
         return (1..MAX_VALUE).asSequence()
-            .runningFold(Pair(0, fuelN0)) { (_, last), n ->
-                Pair(last, map { costFun(abs(mean + n * dir - it)) }.sum())
+            .runningFold(Pair(0, fuelN0)) { (_, current), n ->
+                Pair(current, map { costFun(abs(mean + n * dir - it)) }.sum())
             }
             .first { (last, next) -> next > last }
             .first
@@ -51,15 +51,15 @@ class Day7 {
         val fuelN1 = map { costFun(abs(mean + 1 - it)) }.sum()
         val dir = signum(fuelN0 - fuelN1)
 
-        var last = fuelN0
+        var current = fuelN0
         for (n in 1..MAX_VALUE) {
             val next = map { costFun(abs(mean + n * dir - it)) }.sum()
             when {
-                next > last -> break
-                else -> last = next
+                next > current -> break
+                else -> current = next
             }
         }
-        return last
+        return current
     }
 
     fun parse(resource: String) = this.javaClass
