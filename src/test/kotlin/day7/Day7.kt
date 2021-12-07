@@ -40,7 +40,7 @@ class Day7 {
             .runningFold(Pair(0, fuelN0)) { (_, current), n ->
                 Pair(current, map { costFun(abs(mean + n * dir - it)) }.sum())
             }
-            .first { (last, next) -> next > last }
+            .first { (current, next) -> next > current }
             .first
     }
 
