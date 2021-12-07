@@ -2,7 +2,9 @@ package day7
 
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
-import java.lang.Math.abs
+import java.lang.Integer.signum
+import kotlin.Int.Companion.MAX_VALUE
+import kotlin.math.abs
 
 class Day7 {
 
@@ -12,39 +14,52 @@ class Day7 {
     @Test
     fun puzzle1() {
         sample.fuel() shouldBe 37
+        sample.fuel_mutable() shouldBe 37
         println("Day  6, Puzzle 1: ${input.fuel()} fuel")
     }
 
     @Test
     fun puzzle2() {
         sample.fuel { it.gauss() } shouldBe 168
+        sample.fuel_mutable { it.gauss() } shouldBe 168
         println("Day  6, Puzzle 2: ${input.fuel { it.gauss() }} fuel")
     }
 
     fun Int.gauss() = (this * (this + 1)) / 2
 
+    // searching through the positions starting at the mean average in the direction
+    // where the fuel consumption decreases, until a minimum is found ( the consumption increases again)
+    // this assumes all cost functions produce only one local minimum in the position set
     fun List<Int>.fuel(costFun: (Int) -> Int = { it }): Int {
         val mean = sum() / size
-        val fuelStart = map { costFun(abs(it - mean)) }.sum()
-        val fuelAtLeft = map { costFun(abs(it - (mean - 1))) }.sum()
-        val fuelAtRight = map { costFun(abs(it - (mean + 1))) }.sum()
-        val dir = when {
-            fuelStart < fuelAtLeft && fuelStart < fuelAtRight -> return fuelStart
-            (fuelAtLeft - fuelStart) < (fuelAtRight - fuelStart) -> -1
-            else -> 1
+        val fuelN0 = map { costFun(abs(mean - it)) }.sum()
+        val fuelN1 = map { costFun(abs(mean + 1 - it)) }.sum()
+        val dir = signum(fuelN0 - fuelN1)
 
-        }
-        var currentFuel = fuelStart
-        var distance = 1
-        while (true) {
-            val nextFuel = map { costFun(abs(it - (mean + dir * distance))) }.sum()
-            if (nextFuel > currentFuel) {
-                println("pos: ${mean + dir * (distance - 1)}")
-                return currentFuel
+        return (1..MAX_VALUE).asSequence()
+            .runningFold(MAX_VALUE to fuelN0) { (_, last), n ->
+                last to map { costFun(abs(mean + n * dir - it)) }.sum()
             }
-            currentFuel = nextFuel
-            distance++
+            .first { (last, next) -> next > last }
+            .first
+    }
+
+    // mutable variant to show what is actually happening
+    fun List<Int>.fuel_mutable(costFun: (Int) -> Int = { it }): Int {
+        val mean = sum() / size
+        val fuelN0 = map { costFun(abs(mean - it)) }.sum()
+        val fuelN1 = map { costFun(abs(mean + 1 - it)) }.sum()
+        val dir = signum(fuelN0 - fuelN1)
+
+        var last = fuelN0
+        for (n in 1..MAX_VALUE) {
+            val next = map { costFun(abs(mean + n * dir - it)) }.sum()
+            when {
+                next > last -> break
+                else -> last = next
+            }
         }
+        return last
     }
 
     fun parse(resource: String) = this.javaClass
