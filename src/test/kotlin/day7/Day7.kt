@@ -37,11 +37,9 @@ class Day7 {
         val dir = signum(fuelN0 - fuelN1)
 
         return (1..MAX_VALUE).asSequence()
-            .runningFold(Pair(0, fuelN0)) { (_, current), n ->
-                Pair(current, map { costFun(abs(mean + n * dir - it)) }.sum())
-            }
-            .first { (current, next) -> next > current }
-            .first
+            .map { n -> map { costFun(abs(mean + n * dir - it)) }.sum() }
+            .windowed(2)
+            .first { (current, next) -> next > current }[0]
     }
 
     // mutable variant to show what is actually happening
