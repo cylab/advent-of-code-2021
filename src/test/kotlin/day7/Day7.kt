@@ -39,7 +39,7 @@ class Day7 {
         return (1..MAX_VALUE).asSequence()
             .map { n -> map { costFun(abs(mean + n * dir - it)) }.sum() }
             .windowed(2)
-            .first { (current, next) -> next > current }[0]
+            .first { (current, next) -> current < next }[0]
     }
 
     // mutable variant to show what is actually happening
@@ -53,7 +53,7 @@ class Day7 {
         for (n in 1..MAX_VALUE) {
             val next = map { costFun(abs(mean + n * dir - it)) }.sum()
             when {
-                next > current -> break
+                current < next -> break
                 else -> current = next
             }
         }
