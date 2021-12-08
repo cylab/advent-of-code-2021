@@ -50,7 +50,7 @@ class Day8 {
             .associate { (digit, code) -> code to digit }
 
         return display.reversed()
-            .mapIndexed { n, digit -> decoder[digit]!! * 10f.pow(n) }
+            .mapIndexed { n, code -> decoder[code]!! * 10f.pow(n) }
             .sum().toInt()
     }
 
