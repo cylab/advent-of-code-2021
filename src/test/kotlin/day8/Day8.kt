@@ -5,10 +5,9 @@ import org.junit.jupiter.api.Test
 import kotlin.math.pow
 
 typealias Input = List<Day8.Line>
-typealias Segments = List<Char>
 
 class Day8 {
-    data class Line(val codes: List<Segments>, val display: List<Segments>)
+    data class Line(val codes: List<List<Char>>, val display: List<List<Char>>)
 
     val sample = parse("sample.txt")
     val input = parse("input.txt")
