@@ -33,18 +33,27 @@ class Day9 {
         println("Day  9, Puzzle 2: ${input.biggestBasins()} basins")
     }
 
-    fun Input.sumLows() = lowPoints().map { height(it) + 1 }.sum()
+    fun Input.sumLows() = lowPoints()
+        .map { height(it) + 1 }
+        .sum()
 
-    fun Input.biggestBasins() = lowPoints().map { basin(it).size }.sortedDescending().take(3).reduce(Int::times)
+    fun Input.biggestBasins() = lowPoints()
+        .map { basin(it).size }
+        .sortedDescending()
+        .take(3)
+        .reduce(Int::times)
 
 
-    fun Input.lowPoints() = points().filter { isLowPoint(it) }
+    fun Input.points() = (0 until numX).asSequence()
+        .flatMap { x -> (0 until numY).asSequence().map { y -> x to y } }
 
-    fun Input.isLowPoint(p: Point) = NWSE.map { signum(height(p + it) - height(p)) }.sum() == 4
+    fun Input.lowPoints() = points()
+        .filter { p -> NWSE.map { signum(height(p + it) - height(p)) }.sum() == 4 }
 
-    fun Input.points() = (0 until numX).asSequence().flatMap { x -> (0 until numY).asSequence().map { y -> x to y } }
-
-    fun Input.height(p: Point) = if (p.x < 0 || p.x >= numX || p.y < 0 || p.y >= numY) 9 else heights[p.y][p.x]
+    fun Input.height(p: Point) = when {
+        (p.x < 0 || p.x >= numX || p.y < 0 || p.y >= numY) -> 9
+        else -> heights[p.y][p.x]
+    }
 
     // flood fill
     fun Input.basin(p0: Point): List<Point> {
@@ -60,7 +69,8 @@ class Day9 {
         return basin
     }
 
-    fun parse(resource: String) = this.javaClass.getResource(resource)
+    fun parse(resource: String) = this.javaClass
+        .getResource(resource)
         .readText()
         .lines()
         .filter { it.isNotBlank() }
