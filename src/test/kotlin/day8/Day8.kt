@@ -32,7 +32,7 @@ class Day8 {
 
     fun Line.decode(): Int {
         val decoder = Decoder(10) { emptyList() }
-        codes.descendingByUniqueAndLength().forEach {
+        codes.descendingByUniquenessAndSegmentCount().forEach {
             val digit = when {
                 it.size == 2 -> 1
                 it.size == 3 -> 7
@@ -54,7 +54,7 @@ class Day8 {
         .mapIndexed { n, code -> indexOf(code) * 10f.pow(n) }
         .sum().toInt()
 
-    fun List<Code>.descendingByUniqueAndLength() = sortedByDescending { if (it.is1478()) 8 else it.size }
+    fun List<Code>.descendingByUniquenessAndSegmentCount() = sortedByDescending { if (it.is1478()) 8 else it.size }
 
     fun Code.is1478() = size in listOf(2, 3, 4, 7)
 
