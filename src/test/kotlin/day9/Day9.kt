@@ -51,8 +51,8 @@ class Day9 {
         .filter { p -> NWSE.map { signum(height(p + it) - height(p)) }.sum() == 4 }
 
     fun Input.height(p: Point) = when {
-        (p.x < 0 || p.x >= numX || p.y < 0 || p.y >= numY) -> 9
-        else -> heights[p.y][p.x]
+        p.x in 0..numX && p.y in 0..numY -> heights[p.y][p.x]
+        else -> 9
     }
 
     // flood fill
