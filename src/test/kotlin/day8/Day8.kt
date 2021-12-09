@@ -6,6 +6,7 @@ import kotlin.math.pow
 
 typealias Input = List<Day8.Line>
 typealias Code = List<Char>
+typealias Decoder = Array<Code>
 
 class Day8 {
     data class Line(val codes: List<Code>, val display: List<Code>)
@@ -30,28 +31,30 @@ class Day8 {
     fun Input.sumValues() = map { it.decode() }.sum()
 
     fun Line.decode(): Int {
-        val decoded = Array<Code>(10) { emptyList() }
-        codes.sortedByDescending { if (it.is1478()) 8 else it.size } // make sure unique codes get decoded first
-            .forEach {
-                val digit = when {
-                    it.size == 2 -> 1
-                    it.size == 3 -> 7
-                    it.size == 4 -> 4
-                    it.size == 7 -> 8
-                    it.size == 6 && it.containsAll(decoded[4]) -> 9
-                    it.size == 6 && it.containsAll(decoded[1]) -> 0
-                    it.size == 6 -> 6
-                    it.size == 5 && decoded[6].containsAll(it) -> 5
-                    it.size == 5 && decoded[9].containsAll(it) -> 3
-                    else -> 2
-                }
-                decoded[digit] = it
+        val decoder = Decoder(10) { emptyList() }
+        codes.descendingByUniqueAndLength().forEach {
+            val digit = when {
+                it.size == 2 -> 1
+                it.size == 3 -> 7
+                it.size == 4 -> 4
+                it.size == 7 -> 8
+                it.size == 6 && it.containsAll(decoder[4]) -> 9
+                it.size == 6 && it.containsAll(decoder[1]) -> 0
+                it.size == 6 -> 6
+                it.size == 5 && decoder[6].containsAll(it) -> 5
+                it.size == 5 && decoder[9].containsAll(it) -> 3
+                else -> 2
             }
-
-        return display.reversed()
-            .mapIndexed { n, code -> decoded.indexOf(code) * 10f.pow(n) }
-            .sum().toInt()
+            decoder[digit] = it
+        }
+        return decoder.decode(display)
     }
+
+    fun Decoder.decode(codes: List<Code>) = codes.reversed()
+        .mapIndexed { n, code -> indexOf(code) * 10f.pow(n) }
+        .sum().toInt()
+
+    fun List<Code>.descendingByUniqueAndLength() = sortedByDescending { if (it.is1478()) 8 else it.size }
 
     fun Code.is1478() = size in listOf(2, 3, 4, 7)
 
