@@ -5,16 +5,21 @@ import org.junit.jupiter.api.Test
 import java.lang.Integer.signum
 import java.util.Stack
 
+// poor mans point type
 typealias Point = Pair<Int, Int>
+
+val Point.x get() = first
+val Point.y get() = second
+operator fun Point.plus(other: Point) = x + other.x to y + other.y
 
 class Day9 {
 
     data class Input(val heights: List<List<Int>>, val numX: Int, val numY: Int)
 
-    val NWSE = listOf(0 to -1, -1 to 0, 0 to 1, 1 to 0)
-
     val sample = parse("sample.txt")
     val input = parse("input.txt")
+
+    val NWSE = listOf(0 to -1, -1 to 0, 0 to 1, 1 to 0)
 
     @Test
     fun puzzle1() {
@@ -28,45 +33,32 @@ class Day9 {
         println("Day  9, Puzzle 2: ${input.biggestBasins()} basins")
     }
 
-    fun Input.sumLows() = lowPoints()
-        .map { (x, y) -> height(x, y) + 1 }
-        .sum()
+    fun Input.sumLows() = lowPoints().map { height(it) + 1 }.sum()
+
+    fun Input.biggestBasins() = lowPoints().map { basin(it).size }.sortedDescending().take(3).reduce(Int::times)
 
 
-    fun Input.biggestBasins() = lowPoints()
-        .map { (x, y) -> basinSize(x, y) }
-        .sortedDescending()
-        .take(3)
-        .reduce(Int::times)
+    fun Input.lowPoints() = points().filter { isLowPoint(it) }
 
-    fun Input.lowPoints() = indices().filter { (x, y) -> isLowPoint(x, y) }
+    fun Input.isLowPoint(p: Point) = NWSE.map { signum(height(p + it) - height(p)) }.sum() == 4
 
-    fun Input.isLowPoint(x: Int, y: Int) = NWSE
-        .map { (dx, dy) -> signum(height(x + dx, y + dy) - height(x, y)) }
-        .sum() == 4
+    fun Input.points() = (0 until numX).asSequence().flatMap { x -> (0 until numY).asSequence().map { y -> x to y } }
 
-
-    fun Input.indices() = (0 until numX).asSequence().flatMap { x -> (0 until numY).asSequence().map { y -> x to y } }
-
-    fun Input.height(x: Int, y: Int) = if (x < 0 || x >= numX || y < 0 || y >= numY) 9 else heights[x][y]
+    fun Input.height(p: Point) = if (p.x < 0 || p.x >= numX || p.y < 0 || p.y >= numY) 9 else heights[p.y][p.x]
 
     // flood fill
-    fun Input.basinSize(x0: Int, y0: Int): Int {
+    fun Input.basin(p0: Point): List<Point> {
         val basin = mutableListOf<Point>()
-        val toCheck = Stack<Point>().apply { push(x0 to y0) }
+        val toCheck = Stack<Point>().apply { push(p0) }
         while (toCheck.isNotEmpty()) {
-            toCheck.pop().let { point ->
-                val (x, y) = point
-                if (height(x, y) != 9 && point !in basin) {
-                    basin.add(point)
-                    NWSE.forEach { (dx, dy) -> toCheck.push(x + dx to y + dy) }
-                }
+            val pN = toCheck.pop()
+            if (height(pN) != 9 && pN !in basin) {
+                basin.add(pN)
+                NWSE.forEach { toCheck.push(pN + it) }
             }
         }
-        return basin.size
+        return basin
     }
-
-    operator fun Point.plus(other: Point) = first + other.first to second + other.second
 
     fun parse(resource: String) = this.javaClass.getResource(resource)
         .readText()
