@@ -5,9 +5,10 @@ import org.junit.jupiter.api.Test
 import kotlin.math.pow
 
 typealias Input = List<Day8.Line>
+typealias Code = List<Char>
 
 class Day8 {
-    data class Line(val codes: List<List<Char>>, val display: List<List<Char>>)
+    data class Line(val codes: List<Code>, val display: List<Code>)
 
     val sample = parse("sample.txt")
     val input = parse("input.txt")
@@ -24,42 +25,40 @@ class Day8 {
         println("Day  8, Puzzle 2: ${input.sumValues()} summed values")
     }
 
-    fun Input.count1478() = flatMap { it.display }.count { it.size in listOf(2, 3, 4, 7) }
+    fun Input.count1478() = flatMap { it.display }.count { it.is1478() }
 
     fun Input.sumValues() = map { it.decode() }.sum()
 
     fun Line.decode(): Int {
-        val decoder = codes // make sure unique codes get decoded first
-            .sortedByDescending { if (it.size in listOf(2, 3, 4, 7)) 8 else it.size }
-            .fold(List(10) { listOf<Char>() }) { decoded, code ->
+        val decoded = Array<Code>(10) { emptyList() }
+        codes.sortedByDescending { if (it.is1478()) 8 else it.size } // make sure unique codes get decoded first
+            .forEach {
                 val digit = when {
-                    code.size == 2 -> 1
-                    code.size == 3 -> 7
-                    code.size == 4 -> 4
-                    code.size == 7 -> 8
-                    code.size == 6 && code.containsAll(decoded[4]) -> 9
-                    code.size == 6 && code.containsAll(decoded[1]) -> 0
-                    code.size == 6 -> 6
-                    code.size == 5 && decoded[6].containsAll(code) -> 5
-                    code.size == 5 && decoded[9].containsAll(code) -> 3
+                    it.size == 2 -> 1
+                    it.size == 3 -> 7
+                    it.size == 4 -> 4
+                    it.size == 7 -> 8
+                    it.size == 6 && it.containsAll(decoded[4]) -> 9
+                    it.size == 6 && it.containsAll(decoded[1]) -> 0
+                    it.size == 6 -> 6
+                    it.size == 5 && decoded[6].containsAll(it) -> 5
+                    it.size == 5 && decoded[9].containsAll(it) -> 3
                     else -> 2
                 }
-                decoded.patched(digit, code)
+                decoded[digit] = it
             }
-            .withIndex()
-            .associate { (digit, code) -> code to digit }
 
         return display.reversed()
-            .mapIndexed { n, code -> decoder[code]!! * 10f.pow(n) }
+            .mapIndexed { n, code -> decoded.indexOf(code) * 10f.pow(n) }
             .sum().toInt()
     }
 
+    fun Code.is1478() = size in listOf(2, 3, 4, 7)
 
-    fun <T> List<T>.patched(setAt: Int, value: T) = mapIndexed { i, it -> if (setAt == i) value else it }
-
-    fun String.parseLine() = split("|")
-        .map { part -> part.trim().split(Regex("\\W+")).map { it.toList().sorted() } }
-        .let { (codes, digits) -> Line(codes, digits) }
+    fun String.parseLine() = trim()
+        .split(Regex("\\W+"))
+        .map { it.toList().sorted() }
+        .run { Line(take(10), takeLast(4)) }
 
     fun parse(resource: String) = this.javaClass.getResource(resource)
         .readText()
