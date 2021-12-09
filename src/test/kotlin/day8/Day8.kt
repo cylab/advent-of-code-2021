@@ -50,9 +50,8 @@ class Day8 {
         return decoder.decode(display)
     }
 
-    fun Decoder.decode(codes: List<Code>) = codes.reversed()
-        .mapIndexed { n, code -> indexOf(code) * 10f.pow(n) }
-        .sum().toInt()
+    fun Decoder.decode(codes: List<Code>) =
+        codes.reversed().mapIndexed { n, code -> indexOf(code) * 10f.pow(n) }.sum().toInt()
 
     fun List<Code>.descendingByUniquenessAndSegmentCount() = sortedByDescending { if (it.is1478()) 8 else it.size }
 
