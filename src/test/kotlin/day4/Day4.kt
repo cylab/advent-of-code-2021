@@ -14,7 +14,7 @@ class Day4 {
     data class Win(val board: Board, val drawn: List<Int>)
 
     val sample = parse("sample.txt")
-    val data = parse("input.txt")
+    val data = parse("data.txt")
 
     @Test
     fun puzzle1() {

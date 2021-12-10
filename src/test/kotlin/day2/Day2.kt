@@ -7,7 +7,7 @@ typealias Input = List<Pair<String, Int>>
 
 class Day2 {
     val sample = parse("sample.txt")
-    val data = parse("input.txt")
+    val data = parse("data.txt")
 
     @Test
     fun puzzle1() {

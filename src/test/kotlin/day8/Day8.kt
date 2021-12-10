@@ -12,7 +12,7 @@ class Day8 {
     data class Line(val codes: List<Code>, val display: List<Code>)
 
     val sample = parse("sample.txt")
-    val data = parse("input.txt")
+    val data = parse("data.txt")
 
     @Test
     fun puzzle1() {

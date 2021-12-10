@@ -17,7 +17,7 @@ class Day9 {
     data class Input(val heights: List<List<Int>>, val xMax: Int, val yMax: Int)
 
     val sample = parse("sample.txt")
-    val data = parse("input.txt")
+    val data = parse("data.txt")
 
     val NWSE = listOf(0 to -1, -1 to 0, 0 to 1, 1 to 0)
 

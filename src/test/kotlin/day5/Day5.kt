@@ -11,7 +11,7 @@ class Day5 {
     data class Line(val points: List<Pair<Int, Int>>, val straight: Boolean)
 
     val sample = parse("sample.txt")
-    val data = parse("input.txt")
+    val data = parse("data.txt")
 
     @Test
     fun puzzle1() {
