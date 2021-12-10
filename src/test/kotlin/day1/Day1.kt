@@ -1,5 +1,6 @@
 package day1
 
+import day10.Day10
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
@@ -35,4 +36,9 @@ class Day1 {
         .lines()
         .filter { it.isNotBlank() }
         .map { it.toInt() }
+}
+
+fun main() = Day1().run {
+    puzzle1()
+    puzzle2()
 }

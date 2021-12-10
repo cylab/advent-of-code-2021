@@ -1,5 +1,6 @@
 package day3
 
+import day10.Day10
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import kotlin.math.roundToInt
@@ -56,4 +57,9 @@ class Day3 {
         .readText()
         .lines()
         .filter { it.isNotBlank() }
+}
+
+fun main() = Day3().run {
+    puzzle1()
+    puzzle2()
 }

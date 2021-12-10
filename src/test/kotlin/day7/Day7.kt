@@ -1,5 +1,6 @@
 package day7
 
+import day10.Day10
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import java.lang.Integer.signum
@@ -66,4 +67,9 @@ class Day7 {
         .trim()
         .split(Regex("\\D+"))
         .map { it.toInt() }
+}
+
+fun main() = Day7().run {
+    puzzle1()
+    puzzle2()
 }

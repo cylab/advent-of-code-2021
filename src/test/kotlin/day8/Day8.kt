@@ -1,5 +1,6 @@
 package day8
 
+import day10.Day10
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import kotlin.math.pow
@@ -67,4 +68,9 @@ class Day8 {
         .lines()
         .filter { it.isNotBlank() }
         .map { it.parseLine() }
+}
+
+fun main() = Day8().run {
+    puzzle1()
+    puzzle2()
 }

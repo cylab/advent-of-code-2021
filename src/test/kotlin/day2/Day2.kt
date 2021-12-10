@@ -1,5 +1,6 @@
 package day2
 
+import day10.Day10
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
@@ -53,4 +54,9 @@ class Day2 {
         .map { it.split(" ") }
         .map { (dir, amount) -> dir to amount.toInt() }
 
+}
+
+fun main() = Day2().run {
+    puzzle1()
+    puzzle2()
 }

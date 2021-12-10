@@ -1,5 +1,6 @@
 package day6
 
+import day10.Day10
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import java.util.Collections.rotate
@@ -52,4 +53,9 @@ class Day6 {
         .trim()
         .split(Regex("\\D+"))
         .map { it.toInt() }
+}
+
+fun main() = Day6().run {
+    puzzle1()
+    puzzle2()
 }

@@ -1,5 +1,6 @@
 package day5
 
+import day10.Day10
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import java.lang.Integer.signum
@@ -51,4 +52,9 @@ class Day5 {
         .trim()
         .lines()
         .map { it.createLine() }
+}
+
+fun main() = Day5().run {
+    puzzle1()
+    puzzle2()
 }

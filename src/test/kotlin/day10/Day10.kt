@@ -64,3 +64,8 @@ class Day10 {
         .map { it.toList() }
 }
 
+fun main() = Day10().run {
+    puzzle1()
+    puzzle2()
+}
+

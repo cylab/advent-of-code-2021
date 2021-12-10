@@ -1,5 +1,6 @@
 package day4
 
+import day10.Day10
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
@@ -63,4 +64,9 @@ class Day4 {
         .trim()
         .split(Regex("(?m)[\n\r]*^\\s*$[\n\r]+"))
         .createInput()
+}
+
+fun main() = Day4().run {
+    puzzle1()
+    puzzle2()
 }
