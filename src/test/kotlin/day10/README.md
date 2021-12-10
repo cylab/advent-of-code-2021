@@ -1,93 +1,104 @@
-## --- Day 1: Sonar Sweep ---
+## --- Day 10: Syntax Scoring ---
 
-You're minding your own business on a ship at sea when the overboard alarm goes off! You rush to see if you can help. Apparently, one of the Elves tripped and accidentally sent the sleigh keys flying into the ocean!
+You ask the submarine to determine the best route out of the deep-sea cave, but it only replies:
 
-Before you know it, you're inside a submarine the Elves keep ready for situations like this. It's covered in Christmas lights (because of course it is), and it even has an experimental antenna that should be able to track the keys if you can boost its signal strength high enough; there's a little meter that indicates the antenna's signal strength by displaying 0-50 stars.
+Syntax error in navigation subsystem on line: all of them
 
-Your instincts tell you that in order to save Christmas, you'll need to get all fifty stars by December 25th.
+All of them?! The damage is worse than you thought. You bring up a copy of the navigation subsystem (your puzzle input).
 
-Collect stars by solving puzzles. Two puzzles will be made available on each day in the Advent calendar; the second puzzle is unlocked when you complete the first. Each puzzle grants one star. Good luck!
+The navigation subsystem syntax is made of several lines containing chunks. There are one or more chunks on each line, and chunks contain zero or more other chunks. Adjacent chunks are not separated by any delimiter; if one chunk stops, the next chunk (if any) can immediately start. Every chunk must open and close with one of four legal pairs of matching characters:
 
-As the submarine drops below the surface of the ocean, it automatically performs a sonar sweep of the nearby sea floor. On a small screen, the sonar sweep report (your puzzle input) appears: each line is a measurement of the sea floor depth as the sweep looks further and further away from the submarine.
+   - If a chunk opens with `(`, it must close with `)`.
+   - If a chunk opens with `[`, it must close with `]`.
+   - If a chunk opens with `{`, it must close with `}`.
+   - If a chunk opens with `<`, it must close with `>`.
 
-For example, suppose you had the following report:
+So, `()` is a legal chunk that contains no other chunks, as is `[]`. More complex but valid chunks include `([])`, `{()()()}`, `<([{}])>`, `[<>({}){}[([])<>]]`, and even `(((((((((())))))))))`.
 
-```
-199
-200
-208
-210
-200
-207
-240
-269
-260
-263
-```
+Some lines are incomplete, but others are corrupted. Find and discard the corrupted lines first.
 
-This report indicates that, scanning outward from the submarine, the sonar sweep found depths of 199, 200, 208, 210, and so on.
+A corrupted line is one where a chunk closes with the wrong character - that is, where the characters it opens and closes with do not form one of the four legal pairs listed above.
 
-The first order of business is to figure out how quickly the depth increases, just so you know what you're dealing with - you never know if the keys will get carried into deeper water by an ocean current or a fish or something.
+Examples of corrupted chunks include `(]`, `{()()()>`, `(((()))}`, and `<([]){()}[{}])`. Such a chunk can appear anywhere within a line, and its presence causes the whole line to be considered corrupted.
 
-To do this, count the number of times a depth measurement increases from the previous measurement. (There is no measurement before the first measurement.) In the example above, the changes are as follows:
+For example, consider the following navigation subsystem:
 
 ```
-199 (N/A - no previous measurement)
-200 (increased)
-208 (increased)
-210 (increased)
-200 (decreased)
-207 (increased)
-240 (increased)
-269 (increased)
-260 (decreased)
-263 (increased)
+[({(<(())[]>[[{[]{<()<>>
+[(()[<>])]({[<{<<[]>>(
+{([(<{}[<>[]}>{[]{[(<()>
+(((({<>}<{<{<>}{[]{[]{}
+[[<[([]))<([[{}[[()]]]
+[{[{({}]{}}([{[{{{}}([]
+{<[[]]>}<{[{[{[]{()[[[]
+[<(<(<(<{}))><([]([]()
+<{([([[(<>()){}]>(<<{{
+<{([{{}}[<[[[<>{}]]]>[]]
 ```
 
-In this example, there are 7 measurements that are larger than the previous measurement.
+Some of the lines aren't corrupted, just incomplete; you can ignore these lines for now. The remaining five lines are corrupted:
 
-How many measurements are larger than the previous measurement?
+   - `{([(<{}[<>[]}>{[]{[(<()>` - Expected `]`, but found `}` instead.
+   - `[[<[([]))<([[{}[[()]]]` - Expected `]`, but found `)` instead.
+   - `[{[{({}]{}}([{[{{{}}([]` - Expected `)`, but found `]` instead.
+   - `[<(<(<(<{}))><([]([]()` - Expected `>`, but found `)` instead.
+   - `<{([([[(<>()){}]>(<<{{` - Expected `]`, but found `>` instead.
 
-Your puzzle answer was `1233`.
+Stop at the first incorrect closing character on each corrupted line.
 
-## --- Part Two ---
+Did you know that syntax checkers actually have contests to see who can get the high score for syntax errors in a file? It's true! To calculate the syntax error score for a line, take the first illegal character on the line and look it up in the following table:
 
-Considering every single measurement isn't as useful as you expected: there's just too much noise in the data.
+   - `)`: `3` points.
+   - `]`: `57` points.
+   - `}`: `1197` points.
+   - `>`: `25137` points.
 
-Instead, consider sums of a three-measurement sliding window. Again considering the above example:
+In the above example, an illegal `)` was found twice (`2*3 = 6` points), an illegal `]` was found once (`57` points), an illegal `}` was found once (`1197` points), and an illegal `>` was found once (`25137` points). So, the total syntax error score for this file is `6+57+1197+25137 = 26397` points!
 
-```
-199  A      
-200  A B    
-208  A B C  
-210    B C D
-200  E   C D
-207  E F   D
-240  E F G  
-269    F G H
-260      G H
-263        H
-```
+Find the first illegal character in each corrupted line of the navigation subsystem. What is the total syntax error score for those errors?
 
-Start by comparing the first and second three-measurement windows. The measurements in the first window are marked A (199, 200, 208); their sum is 199 + 200 + 208 = 607. The second window is marked B (200, 208, 210); its sum is 618. The sum of measurements in the second window is larger than the sum of the first, so this first comparison increased.
+Your puzzle answer was `323691`.
 
-Your goal now is to count the number of times the sum of measurements in this sliding window increases from the previous sum. So, compare A with B, then compare B with C, then C with D, and so on. Stop when there aren't enough measurements left to create a new three-measurement sum.
+The first half of this puzzle is complete! It provides one gold star: *
+--- Part Two ---
 
-In the above example, the sum of each three-measurement window is as follows:
+Now, discard the corrupted lines. The remaining lines are incomplete.
 
-```
-A: 607 (N/A - no previous sum)
-B: 618 (increased)
-C: 618 (no change)
-D: 617 (decreased)
-E: 647 (increased)
-F: 716 (increased)
-G: 769 (increased)
-H: 792 (increased)
-```
+Incomplete lines don't have any incorrect characters - instead, they're missing some closing characters at the end of the line. To repair the navigation subsystem, you just need to figure out the sequence of closing characters that complete all open chunks in the line.
 
-In this example, there are 5 sums that are larger than the previous sum.
+You can only use closing characters (`)`, `]`, `}`, or `>`), and you must add them in the correct order so that only legal pairs are formed and all chunks end up closed.
 
-Consider sums of a three-measurement sliding window. How many sums are larger than the previous sum?
+In the example above, there are five incomplete lines:
 
-Your puzzle answer was `1275`.
+   - `[({(<(())[]>[[{[]{<()<>>` - Complete by adding `}}]])})]`.
+   - `[(()[<>])]({[<{<<[]>>(` - Complete by adding `)}>]})`.
+   - `(((({<>}<{<{<>}{[]{[]{}` - Complete by adding `}}>}>))))`.
+   - `{<[[]]>}<{[{[{[]{()[[[]` - Complete by adding `]]}}]}]}>`.
+   - `<{([{{}}[<[[[<>{}]]]>[]]` - Complete by adding `])}>`.
+
+Did you know that autocomplete tools also have contests? It's true! The score is determined by considering the completion string character-by-character. Start with a total score of 0. Then, for each character, multiply the total score by 5 and then increase the total score by the point value given for the character in the following table:
+
+   - `)`: `1` point.
+   - `]`: `2` points.
+   - `}`: `3` points.
+   - `>`: `4` points.
+
+So, the last completion string above - ])}> - would be scored as follows:
+
+   - Start with a total score of `0`.
+   - Multiply the total score by `5` to get `0`, then add the value of `]` (`2`) to get a new total score of `2`.
+   - Multiply the total score by `5` to get `10`, then add the value of `)` (`1`) to get a new total score of `11`.
+   - Multiply the total score by `5` to get `55`, then add the value of `}` (`3`) to get a new total score of `58`.
+   - Multiply the total score by `5` to get `290`, then add the value of `>` (`4`) to get a new total score of `294`.
+
+The five lines' completion strings have total scores as follows:
+
+   - `}}]])})] - `288957` total points.
+   - `)}>]}) - `5566` total points.
+   - `}}>}>)))) - `1480781` total points.
+   - `]]}}]}]}> - `995444` total points.
+   - `])}> - `294` total points.
+
+Autocomplete tools are an odd bunch: the winner is found by sorting all of the scores and then taking the middle score. (There will always be an odd number of scores to consider.) In this example, the middle score is `288957` because there are the same number of scores smaller and larger than it.
+
+Find the completion string for each incomplete line, score the completion strings, and sort the scores. What is the middle score?
