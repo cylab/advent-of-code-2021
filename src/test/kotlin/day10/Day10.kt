@@ -59,11 +59,11 @@ class Day10 {
         return Error(incomplete = started)
     }
 
-    fun Incomplete.score() = asReversed()
-        .fold(0L) { score, it -> score * 5 + it.index }
-
     fun chunkType(char: Char) = ChunkType.values()
         .first { char == it.start || char == it.end }
+
+    fun Incomplete.score() = asReversed()
+        .fold(0L) { score, it -> score * 5 + it.index }
 
     fun parse(resource: String) = this.javaClass
         .getResource(resource)
