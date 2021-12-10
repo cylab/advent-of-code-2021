@@ -32,12 +32,12 @@ class Day7 {
     // this assumes all cost functions produce only one local minimum in the position set
     fun List<Int>.fuel(costFun: (Int) -> Int = { it }): Int {
         val mean = sum() / size
-        val fuelN0 = map { costFun(abs(mean - it)) }.sum()
-        val fuelN1 = map { costFun(abs(mean + 1 - it)) }.sum()
+        val fuelN0 = sumOf { costFun(abs(mean - it)) }
+        val fuelN1 = sumOf { costFun(abs(mean + 1 - it)) }
         val dir = signum(fuelN0 - fuelN1)
 
         return (1..MAX_VALUE).asSequence()
-            .map { n -> map { costFun(abs(mean + n * dir - it)) }.sum() }
+            .map { n -> sumOf { costFun(abs(mean + n * dir - it)) } }
             .windowed(2)
             .first { (current, next) -> current < next }[0]
     }
@@ -45,13 +45,13 @@ class Day7 {
     // mutable variant to show what is actually happening
     fun List<Int>.fuel_mutable(costFun: (Int) -> Int = { it }): Int {
         val mean = sum() / size
-        val fuelN0 = map { costFun(abs(mean - it)) }.sum()
-        val fuelN1 = map { costFun(abs(mean + 1 - it)) }.sum()
+        val fuelN0 = sumOf { costFun(abs(mean - it)) }
+        val fuelN1 = sumOf { costFun(abs(mean + 1 - it)) }
         val dir = signum(fuelN0 - fuelN1)
 
         var current = fuelN0
         for (n in 1..MAX_VALUE) {
-            val next = map { costFun(abs(mean + n * dir - it)) }.sum()
+            val next = sumOf { costFun(abs(mean + n * dir - it)) }
             when {
                 current < next -> break
                 else -> current = next

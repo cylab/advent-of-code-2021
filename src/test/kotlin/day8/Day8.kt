@@ -28,7 +28,7 @@ class Day8 {
 
     fun Input.count1478() = flatMap { it.display }.count { it.is1478() }
 
-    fun Input.sumValues() = map { it.decode() }.sum()
+    fun Input.sumValues() = sumOf { it.decode() }
 
     fun Line.decode(): Int {
         val decoder = Decoder(10) { emptyList() }

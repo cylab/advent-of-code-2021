@@ -14,7 +14,7 @@ operator fun Point.plus(other: Point) = x + other.x to y + other.y
 
 class Day9 {
 
-    data class Input(val heights: List<List<Int>>, val numX: Int, val numY: Int)
+    data class Input(val heights: List<List<Int>>, val xMax: Int, val yMax: Int)
 
     val sample = parse("sample.txt")
     val input = parse("input.txt")
@@ -34,8 +34,7 @@ class Day9 {
     }
 
     fun Input.sumLows() = lowPoints()
-        .map { height(it) + 1 }
-        .sum()
+        .sumOf { height(it) + 1 }
 
     fun Input.biggestBasins() = lowPoints()
         .map { basin(it).size }
@@ -44,14 +43,14 @@ class Day9 {
         .reduce(Int::times)
 
 
-    fun Input.points() = (0 until numX).asSequence()
-        .flatMap { x -> (0 until numY).asSequence().map { y -> x to y } }
+    fun Input.points() = (0..xMax).asSequence()
+        .flatMap { x -> (0..yMax).asSequence().map { y -> x to y } }
 
     fun Input.lowPoints() = points()
-        .filter { p -> NWSE.map { signum(height(p + it) - height(p)) }.sum() == 4 }
+        .filter { p -> NWSE.sumOf { signum(height(p + it) - height(p)) } == 4 }
 
     fun Input.height(p: Point) = when {
-        p.x in 0 until numX && p.y in 0 until numY -> heights[p.y][p.x]
+        p.x in 0..xMax && p.y in 0..yMax -> heights[p.y][p.x]
         else -> 9
     }
 
@@ -75,5 +74,5 @@ class Day9 {
         .lines()
         .filter { it.isNotBlank() }
         .map { line -> line.map { it.digitToInt() } }
-        .let { Input(it, it.first().size, it.size) }
+        .let { Input(it, it.first().size - 1, it.size - 1) }
 }
