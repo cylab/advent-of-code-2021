@@ -37,16 +37,16 @@ class Day10 {
     }
 
 
-    fun Input.corruption() = mapNotNull { line -> line.status().corrupted }
+    fun Input.corruption() = mapNotNull { line -> line.check().corrupted }
         .sumOf { it.score }
 
-    fun Input.incompleteness() = mapNotNull { line -> line.status().incomplete }
+    fun Input.incompleteness() = mapNotNull { line -> line.check().incomplete }
         .map { it.valuate() }
         .sorted()
         .let { it[it.size / 2] }
 
 
-    fun Line.status(): Status {
+    fun Line.check(): Status {
         val started = StartedChunks()
         onEach { char ->
             val type = chunkType(char)
@@ -55,10 +55,7 @@ class Day10 {
                 started.pop() != type -> return Status(corrupted = type)
             }
         }
-        return when {
-            started.isNotEmpty() -> Status(incomplete = started)
-            else -> Status()
-        }
+        return if (started.isEmpty()) Status() else Status(incomplete = started)
     }
 
     fun chunkType(char: Char) = ChunkType.values()
