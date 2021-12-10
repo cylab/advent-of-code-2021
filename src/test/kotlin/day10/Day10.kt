@@ -9,7 +9,7 @@ typealias Input = List<Line>
 typealias Line = List<Char>
 
 class Day10 {
-    enum class Delimiter(val start: Char, val end: Char, val corrupted: Int, val incomplete: Int) {
+    enum class ChunkTypes(val start: Char, val end: Char, val corrupted: Int, val incomplete: Int) {
         ROUND('(', ')', 3, 1), SQUARE('[', ']', 57, 2), CURLY('{', '}', 1197, 3), POINTY('<', '>', 25137, 4)
     }
 
@@ -38,25 +38,20 @@ class Day10 {
 
 
     fun Line.errors(): Pair<Int, Int> {
-        val opened = Stack<Delimiter>()
+        val opened = Stack<ChunkTypes>()
         onEach {
-            val chunkDelimiter = it.toDelimiter()
-            when (it == chunkDelimiter.start) {
-                true -> opened.push(chunkDelimiter)
-                else -> {
-                    val expected = opened.pop()
-                    if (expected != chunkDelimiter) {
-                        return chunkDelimiter.corrupted to 0
-                    }
-                }
+            val type = it.chunkType()
+            when {
+                (it == type.start) -> opened.push(type)
+                opened.pop() != type -> return Pair(type.corrupted, 0)
             }
         }
-        return 0 to opened.incompleteScore()
+        return Pair(0, opened.incompleteScore())
     }
 
-    fun Stack<Delimiter>.incompleteScore() = asReversed().fold(0) { score, it -> score * 5 + it.incomplete }
+    fun Stack<ChunkTypes>.incompleteScore() = asReversed().fold(0) { score, it -> score * 5 + it.incomplete }
 
-    fun Char.toDelimiter() = Delimiter.values().first { this == it.end || this == it.start }
+    fun Char.chunkType() = ChunkTypes.values().first { this == it.end || this == it.start }
 
     fun parse(resource: String) = this.javaClass
         .getResource(resource)
