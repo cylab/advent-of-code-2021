@@ -7,11 +7,18 @@ import java.util.Stack
 
 typealias Input = List<Line>
 typealias Line = List<Char>
+typealias Incomplete = Stack<ChunkType>
+
+enum class ChunkType(val start: Char, val end: Char, val score: Long, val index: Long) {
+    ROUND('(', ')', 3, 1),
+    SQUARE('[', ']', 57, 2),
+    CURLY('{', '}', 1197, 3),
+    POINTY('<', '>', 25137, 4)
+}
+
+data class Error(val corrupted: ChunkType? = null, val incomplete: Incomplete? = null)
 
 class Day10 {
-    enum class ChunkTypes(val start: Char, val end: Char, val corrupted: Long, val incomplete: Long) {
-        ROUND('(', ')', 3, 1), SQUARE('[', ']', 57, 2), CURLY('{', '}', 1197, 3), POINTY('<', '>', 25137, 4)
-    }
 
     val sample = parse("sample.txt")
     val data = parse("data.txt")
@@ -30,31 +37,33 @@ class Day10 {
     }
 
 
-    fun Input.corruption() = sumOf { it.errors().first }
+    fun Input.corruption() = mapNotNull { it.error().corrupted }
+        .sumOf { it.score }
 
-    fun Input.incompleteness() = map { it.errors().second }
-        .filter { it != 0L }
+    fun Input.incompleteness() = mapNotNull { it.error().incomplete }
+        .filter { it.isNotEmpty() }
+        .map { it.score() }
         .sorted()
         .let { it[it.size / 2] }
 
 
-    fun Line.errors(): Pair<Long, Long> {
-        val opened = Stack<ChunkTypes>()
+    fun Line.error(): Error {
+        val started = Incomplete()
         onEach {
-            val type = it.chunkType()
+            val type = chunkType(it)
             when {
-                (it == type.start) -> opened.push(type)
-                opened.pop() != type -> return Pair(type.corrupted, 0)
+                (it == type.start) -> started.push(type)
+                started.pop() != type -> return Error(corrupted = type)
             }
         }
-        return Pair(0, opened.incompleteScore())
+        return Error(incomplete = started)
     }
 
-    fun Stack<ChunkTypes>.incompleteScore() = asReversed()
-        .fold(0L) { score, it -> score * 5 + it.incomplete }
+    fun Incomplete.score() = asReversed()
+        .fold(0L) { score, it -> score * 5 + it.index }
 
-    fun Char.chunkType() = ChunkTypes.values()
-        .first { this == it.end || this == it.start }
+    fun chunkType(char: Char) = ChunkType.values()
+        .first { char == it.start || char == it.end }
 
     fun parse(resource: String) = this.javaClass
         .getResource(resource)
