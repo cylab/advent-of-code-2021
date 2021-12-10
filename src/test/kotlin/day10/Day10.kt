@@ -7,18 +7,18 @@ import java.util.Stack
 
 typealias Input = List<Line>
 typealias Line = List<Char>
-typealias Incomplete = Stack<ChunkType>
-
-enum class ChunkType(val start: Char, val end: Char, val score: Long, val index: Long) {
-    ROUND('(', ')', 3, 1),
-    SQUARE('[', ']', 57, 2),
-    CURLY('{', '}', 1197, 3),
-    POINTY('<', '>', 25137, 4)
-}
-
-data class Error(val corrupted: ChunkType? = null, val incomplete: Incomplete? = null)
+typealias StartedChunks = Stack<Day10.ChunkType>
 
 class Day10 {
+
+    enum class ChunkType(val rank: Long, val start: Char, val end: Char, val score: Long) {
+        ROUND(1, '(', ')', 3),
+        SQUARE(2, '[', ']', 57),
+        CURLY(3, '{', '}', 1197),
+        POINTY(4, '<', '>', 25137)
+    }
+
+    data class Status(val corrupted: ChunkType? = null, val incomplete: StartedChunks? = null)
 
     val sample = parse("sample.txt")
     val data = parse("data.txt")
@@ -37,33 +37,35 @@ class Day10 {
     }
 
 
-    fun Input.corruption() = mapNotNull { it.error().corrupted }
+    fun Input.corruption() = mapNotNull { line -> line.status().corrupted }
         .sumOf { it.score }
 
-    fun Input.incompleteness() = mapNotNull { it.error().incomplete }
-        .filter { it.isNotEmpty() }
-        .map { it.score() }
+    fun Input.incompleteness() = mapNotNull { line -> line.status().incomplete }
+        .map { it.valuate() }
         .sorted()
         .let { it[it.size / 2] }
 
 
-    fun Line.error(): Error {
-        val started = Incomplete()
-        onEach {
-            val type = chunkType(it)
+    fun Line.status(): Status {
+        val started = StartedChunks()
+        onEach { char ->
+            val type = chunkType(char)
             when {
-                (it == type.start) -> started.push(type)
-                started.pop() != type -> return Error(corrupted = type)
+                char == type.start -> started.push(type)
+                started.pop() != type -> return Status(corrupted = type)
             }
         }
-        return Error(incomplete = started)
+        return when {
+            started.isNotEmpty() -> Status(incomplete = started)
+            else -> Status()
+        }
     }
 
     fun chunkType(char: Char) = ChunkType.values()
         .first { char == it.start || char == it.end }
 
-    fun Incomplete.score() = asReversed()
-        .fold(0L) { score, it -> score * 5 + it.index }
+    fun StartedChunks.valuate() = asReversed()
+        .fold(0L) { score, it -> score * 5 + it.rank }
 
     fun parse(resource: String) = this.javaClass
         .getResource(resource)
@@ -77,4 +79,3 @@ fun main() = Day10().run {
     puzzle1()
     puzzle2()
 }
-
