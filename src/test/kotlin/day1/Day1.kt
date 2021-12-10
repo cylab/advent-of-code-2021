@@ -7,18 +7,18 @@ typealias Input = List<Int>
 
 class Day1 {
     val sample = parse("sample.txt")
-    val input = parse("input.txt")
+    val data = parse("input.txt")
 
     @Test
     fun puzzle1() {
         sample.countIncrements() shouldBe 7
-        println("Day  1, Puzzle 1: ${input.countIncrements()} increments")
+        println("Day  1, Puzzle 1: ${data.countIncrements()} increments")
     }
 
     @Test
     fun puzzle2() {
         sample.countIncrements(3) shouldBe 5
-        println("Day  1, Puzzle 2: ${input.countIncrements(3)} increments")
+        println("Day  1, Puzzle 2: ${data.countIncrements(3)} increments")
     }
 
 

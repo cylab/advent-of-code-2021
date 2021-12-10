@@ -17,20 +17,20 @@ class Day9 {
     data class Input(val heights: List<List<Int>>, val xMax: Int, val yMax: Int)
 
     val sample = parse("sample.txt")
-    val input = parse("input.txt")
+    val data = parse("input.txt")
 
     val NWSE = listOf(0 to -1, -1 to 0, 0 to 1, 1 to 0)
 
     @Test
     fun puzzle1() {
         sample.sumLows() shouldBe 15
-        println("Day  9, Puzzle 1: ${input.sumLows()} lows")
+        println("Day  9, Puzzle 1: ${data.sumLows()} lows")
     }
 
     @Test
     fun puzzle2() {
         sample.biggestBasins() shouldBe 1134
-        println("Day  9, Puzzle 2: ${input.biggestBasins()} basins")
+        println("Day  9, Puzzle 2: ${data.biggestBasins()} basins")
     }
 
     fun Input.sumLows() = lowPoints()

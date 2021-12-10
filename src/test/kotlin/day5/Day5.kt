@@ -11,18 +11,18 @@ class Day5 {
     data class Line(val points: List<Pair<Int, Int>>, val straight: Boolean)
 
     val sample = parse("sample.txt")
-    val input = parse("input.txt")
+    val data = parse("input.txt")
 
     @Test
     fun puzzle1() {
         sample.filter { it.straight }.overlaps() shouldBe 5
-        println("Day  5, Puzzle 1: ${input.filter { it.straight }.overlaps()} overlaps")
+        println("Day  5, Puzzle 1: ${data.filter { it.straight }.overlaps()} overlaps")
     }
 
     @Test
     fun puzzle2() {
         sample.overlaps() shouldBe 12
-        println("Day  5, Puzzle 2: ${input.overlaps()} overlaps")
+        println("Day  5, Puzzle 2: ${data.overlaps()} overlaps")
     }
 
     fun List<Line>.overlaps() = flatMap { it.points }

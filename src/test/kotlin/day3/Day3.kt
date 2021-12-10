@@ -9,18 +9,18 @@ typealias Input = List<String>
 class Day3 {
 
     val sample = parse("sample.txt")
-    val input = parse("input.txt")
+    val data = parse("input.txt")
 
     @Test
     fun puzzle1() {
         sample.gammaAndEpsilon() shouldBe 198
-        println("Day  3, Puzzle 1: ${input.gammaAndEpsilon()} ratings")
+        println("Day  3, Puzzle 1: ${data.gammaAndEpsilon()} ratings")
     }
 
     @Test
     fun puzzle2() {
         sample.oxygenAndCO2() shouldBe 230
-        println("Day  3, Puzzle 2: ${input.oxygenAndCO2()} ratings")
+        println("Day  3, Puzzle 2: ${data.oxygenAndCO2()} ratings")
     }
 
 

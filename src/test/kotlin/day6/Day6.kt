@@ -7,20 +7,20 @@ import java.util.Collections.rotate
 class Day6 {
 
     val sample = parse("sample.txt")
-    val input = parse("input.txt")
+    val data = parse("input.txt")
 
     @Test
     fun puzzle1() {
         sample.population(days = 80) shouldBe 5934
         sample.population_mutable(days = 80) shouldBe 5934
-        println("Day  6, Puzzle 1: ${input.population(days = 80)} laternfish")
+        println("Day  6, Puzzle 1: ${data.population(days = 80)} laternfish")
     }
 
     @Test
     fun puzzle2() {
         sample.population(days = 256) shouldBe 26984457539
         sample.population_mutable(days = 256) shouldBe 26984457539
-        println("Day  6, Puzzle 2: ${input.population(days = 256)} laternfish")
+        println("Day  6, Puzzle 2: ${data.population(days = 256)} laternfish")
     }
 
     // modified iterative fibonacci with immutable data structures

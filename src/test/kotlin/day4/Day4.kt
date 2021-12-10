@@ -14,18 +14,18 @@ class Day4 {
     data class Win(val board: Board, val drawn: List<Int>)
 
     val sample = parse("sample.txt")
-    val input = parse("input.txt")
+    val data = parse("input.txt")
 
     @Test
     fun puzzle1() {
         sample.wins().first().score() shouldBe 4512
-        println("Day  4, Puzzle 1: ${input.wins().first().score()} score")
+        println("Day  4, Puzzle 1: ${data.wins().first().score()} score")
     }
 
     @Test
     fun puzzle2() {
         sample.wins().last().score() shouldBe 1924
-        println("Day  4, Puzzle 2: ${input.wins().last().score()} score")
+        println("Day  4, Puzzle 2: ${data.wins().last().score()} score")
     }
 
 

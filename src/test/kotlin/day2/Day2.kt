@@ -7,18 +7,18 @@ typealias Input = List<Pair<String, Int>>
 
 class Day2 {
     val sample = parse("sample.txt")
-    val input = parse("input.txt")
+    val data = parse("input.txt")
 
     @Test
     fun puzzle1() {
         sample.posAndDepth() shouldBe 150
-        println("Day  2, Puzzle 1: ${input.posAndDepth()} combined steering")
+        println("Day  2, Puzzle 1: ${data.posAndDepth()} combined steering")
     }
 
     @Test
     fun puzzle2() {
         sample.posAndAim() shouldBe 900
-        println("Day  2, Puzzle 2: ${input.posAndAim()} combined steering")
+        println("Day  2, Puzzle 2: ${data.posAndAim()} combined steering")
     }
 
 

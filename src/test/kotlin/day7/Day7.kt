@@ -9,20 +9,20 @@ import kotlin.math.abs
 class Day7 {
 
     val sample = parse("sample.txt")
-    val input = parse("input.txt")
+    val data = parse("input.txt")
 
     @Test
     fun puzzle1() {
         sample.fuel() shouldBe 37
         sample.fuel_mutable() shouldBe 37
-        println("Day  6, Puzzle 1: ${input.fuel()} fuel")
+        println("Day  6, Puzzle 1: ${data.fuel()} fuel")
     }
 
     @Test
     fun puzzle2() {
         sample.fuel { it.gauss() } shouldBe 168
         sample.fuel_mutable { it.gauss() } shouldBe 168
-        println("Day  6, Puzzle 2: ${input.fuel { it.gauss() }} fuel")
+        println("Day  6, Puzzle 2: ${data.fuel { it.gauss() }} fuel")
     }
 
     fun Int.gauss() = (this * (this + 1)) / 2

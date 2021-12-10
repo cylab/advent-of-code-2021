@@ -12,18 +12,18 @@ class Day8 {
     data class Line(val codes: List<Code>, val display: List<Code>)
 
     val sample = parse("sample.txt")
-    val input = parse("input.txt")
+    val data = parse("input.txt")
 
     @Test
     fun puzzle1() {
         sample.count1478() shouldBe 26
-        println("Day  8, Puzzle 1: ${input.count1478()} easy codes")
+        println("Day  8, Puzzle 1: ${data.count1478()} easy codes")
     }
 
     @Test
     fun puzzle2() {
         sample.sumValues() shouldBe 61229
-        println("Day  8, Puzzle 2: ${input.sumValues()} summed values")
+        println("Day  8, Puzzle 2: ${data.sumValues()} summed values")
     }
 
     fun Input.count1478() = flatMap { it.display }.count { it.is1478() }
