@@ -52,7 +52,7 @@ class Day11 {
             count += flashes.size
             visit = flashes
                 .flatMap { adjacent(it) }
-                .filter { data[it.y][it.x] > 0 } // ignore already flashed in this step!
+                .filter { data[it.y][it.x] > 0 } // ignore already flashed for next step!
         } while (visit.isNotEmpty())
         return count
     }
