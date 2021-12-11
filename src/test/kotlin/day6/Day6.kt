@@ -11,14 +11,14 @@ class Day6 {
     val data = parse("data.txt")
 
     @Test
-    fun puzzle1() {
+    fun part1() {
         sample.population(days = 80) shouldBe 5934
         sample.population_mutable(days = 80) shouldBe 5934
         println("Day  6, Puzzle 1: ${data.population(days = 80)} laternfish")
     }
 
     @Test
-    fun puzzle2() {
+    fun part2() {
         sample.population(days = 256) shouldBe 26984457539
         sample.population_mutable(days = 256) shouldBe 26984457539
         println("Day  6, Puzzle 2: ${data.population(days = 256)} laternfish")
@@ -56,6 +56,6 @@ class Day6 {
 }
 
 fun main() = Day6().run {
-    puzzle1()
-    puzzle2()
+    part1()
+    part2()
 }

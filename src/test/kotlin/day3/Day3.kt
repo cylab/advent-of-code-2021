@@ -13,13 +13,13 @@ class Day3 {
     val data = parse("data.txt")
 
     @Test
-    fun puzzle1() {
+    fun part1() {
         sample.gammaAndEpsilon() shouldBe 198
         println("Day  3, Puzzle 1: ${data.gammaAndEpsilon()} ratings")
     }
 
     @Test
-    fun puzzle2() {
+    fun part2() {
         sample.oxygenAndCO2() shouldBe 230
         println("Day  3, Puzzle 2: ${data.oxygenAndCO2()} ratings")
     }
@@ -60,6 +60,6 @@ class Day3 {
 }
 
 fun main() = Day3().run {
-    puzzle1()
-    puzzle2()
+    part1()
+    part2()
 }

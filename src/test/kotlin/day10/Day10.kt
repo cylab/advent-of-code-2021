@@ -24,13 +24,13 @@ class Day10 {
     val data = parse("data.txt")
 
     @Test
-    fun puzzle1() {
+    fun part1() {
         sample.corruption() shouldBe 26397
         println("Day 10, Puzzle 1: ${data.corruption()} corruption score")
     }
 
     @Test
-    fun puzzle2() {
+    fun part2() {
         sample.incompleteness() shouldBe 288957
         println("Day 10, Puzzle 1: ${data.incompleteness()} incompleteness score")
         data.incompleteness() shouldNotBe 44087106 // my first wrong solution due to using Int instead of Long! :((
@@ -73,6 +73,6 @@ class Day10 {
 }
 
 fun main() = Day10().run {
-    puzzle1()
-    puzzle2()
+    part1()
+    part2()
 }

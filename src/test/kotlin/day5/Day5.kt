@@ -15,13 +15,13 @@ class Day5 {
     val data = parse("data.txt")
 
     @Test
-    fun puzzle1() {
+    fun part1() {
         sample.filter { it.straight }.overlaps() shouldBe 5
         println("Day  5, Puzzle 1: ${data.filter { it.straight }.overlaps()} overlaps")
     }
 
     @Test
-    fun puzzle2() {
+    fun part2() {
         sample.overlaps() shouldBe 12
         println("Day  5, Puzzle 2: ${data.overlaps()} overlaps")
     }
@@ -55,6 +55,6 @@ class Day5 {
 }
 
 fun main() = Day5().run {
-    puzzle1()
-    puzzle2()
+    part1()
+    part2()
 }

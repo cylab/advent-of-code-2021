@@ -11,13 +11,13 @@ class Day2 {
     val data = parse("data.txt")
 
     @Test
-    fun puzzle1() {
+    fun part1() {
         sample.posAndDepth() shouldBe 150
         println("Day  2, Puzzle 1: ${data.posAndDepth()} combined steering")
     }
 
     @Test
-    fun puzzle2() {
+    fun part2() {
         sample.posAndAim() shouldBe 900
         println("Day  2, Puzzle 2: ${data.posAndAim()} combined steering")
     }
@@ -57,6 +57,6 @@ class Day2 {
 }
 
 fun main() = Day2().run {
-    puzzle1()
-    puzzle2()
+    part1()
+    part2()
 }

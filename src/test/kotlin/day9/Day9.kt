@@ -23,13 +23,13 @@ class Day9 {
     val NWSE = listOf(0 to -1, -1 to 0, 0 to 1, 1 to 0)
 
     @Test
-    fun puzzle1() {
+    fun part1() {
         sample.sumLows() shouldBe 15
         println("Day  9, Puzzle 1: ${data.sumLows()} lows")
     }
 
     @Test
-    fun puzzle2() {
+    fun part2() {
         sample.biggestBasins() shouldBe 1134
         println("Day  9, Puzzle 2: ${data.biggestBasins()} basins")
     }
@@ -79,6 +79,6 @@ class Day9 {
 }
 
 fun main() = Day9().run {
-    puzzle1()
-    puzzle2()
+    part1()
+    part2()
 }

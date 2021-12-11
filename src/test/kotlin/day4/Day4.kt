@@ -18,13 +18,13 @@ class Day4 {
     val data = parse("data.txt")
 
     @Test
-    fun puzzle1() {
+    fun part1() {
         sample.wins().first().score() shouldBe 4512
         println("Day  4, Puzzle 1: ${data.wins().first().score()} score")
     }
 
     @Test
-    fun puzzle2() {
+    fun part2() {
         sample.wins().last().score() shouldBe 1924
         println("Day  4, Puzzle 2: ${data.wins().last().score()} score")
     }
@@ -67,6 +67,6 @@ class Day4 {
 }
 
 fun main() = Day4().run {
-    puzzle1()
-    puzzle2()
+    part1()
+    part2()
 }

@@ -13,14 +13,14 @@ class Day7 {
     val data = parse("data.txt")
 
     @Test
-    fun puzzle1() {
+    fun part1() {
         sample.fuel() shouldBe 37
         sample.fuel_mutable() shouldBe 37
         println("Day  6, Puzzle 1: ${data.fuel()} fuel")
     }
 
     @Test
-    fun puzzle2() {
+    fun part2() {
         sample.fuel { it.gauss() } shouldBe 168
         sample.fuel_mutable { it.gauss() } shouldBe 168
         println("Day  6, Puzzle 2: ${data.fuel { it.gauss() }} fuel")
@@ -70,6 +70,6 @@ class Day7 {
 }
 
 fun main() = Day7().run {
-    puzzle1()
-    puzzle2()
+    part1()
+    part2()
 }

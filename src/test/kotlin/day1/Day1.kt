@@ -11,13 +11,13 @@ class Day1 {
     val data = parse("data.txt")
 
     @Test
-    fun puzzle1() {
+    fun part1() {
         sample.countIncrements() shouldBe 7
         println("Day  1, Puzzle 1: ${data.countIncrements()} increments")
     }
 
     @Test
-    fun puzzle2() {
+    fun part2() {
         sample.countIncrements(3) shouldBe 5
         println("Day  1, Puzzle 2: ${data.countIncrements(3)} increments")
     }
@@ -39,6 +39,6 @@ class Day1 {
 }
 
 fun main() = Day1().run {
-    puzzle1()
-    puzzle2()
+    part1()
+    part2()
 }

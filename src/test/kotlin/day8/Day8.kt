@@ -16,13 +16,13 @@ class Day8 {
     val data = parse("data.txt")
 
     @Test
-    fun puzzle1() {
+    fun part1() {
         sample.count1478() shouldBe 26
         println("Day  8, Puzzle 1: ${data.count1478()} easy codes")
     }
 
     @Test
-    fun puzzle2() {
+    fun part2() {
         sample.sumValues() shouldBe 61229
         println("Day  8, Puzzle 2: ${data.sumValues()} summed values")
     }
@@ -71,6 +71,6 @@ class Day8 {
 }
 
 fun main() = Day8().run {
-    puzzle1()
-    puzzle2()
+    part1()
+    part2()
 }
