@@ -16,14 +16,14 @@ class Day7 {
     fun part1() {
         sample.fuel() shouldBe 37
         sample.fuel_mutable() shouldBe 37
-        println("Day  6, Puzzle 1: ${data.fuel()} fuel")
+        println("Day  6, Part 1: ${data.fuel()} fuel")
     }
 
     @Test
     fun part2() {
         sample.fuel { it.gauss() } shouldBe 168
         sample.fuel_mutable { it.gauss() } shouldBe 168
-        println("Day  6, Puzzle 2: ${data.fuel { it.gauss() }} fuel")
+        println("Day  6, Part 2: ${data.fuel { it.gauss() }} fuel")
     }
 
     fun Int.gauss() = (this * (this + 1)) / 2

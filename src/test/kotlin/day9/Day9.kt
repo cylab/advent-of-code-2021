@@ -25,13 +25,13 @@ class Day9 {
     @Test
     fun part1() {
         sample.sumLows() shouldBe 15
-        println("Day  9, Puzzle 1: ${data.sumLows()} lows")
+        println("Day  9, Part 1: ${data.sumLows()} lows")
     }
 
     @Test
     fun part2() {
         sample.biggestBasins() shouldBe 1134
-        println("Day  9, Puzzle 2: ${data.biggestBasins()} basins")
+        println("Day  9, Part 2: ${data.biggestBasins()} basins")
     }
 
     fun Input.sumLows() = lowPoints()

@@ -17,13 +17,13 @@ class Day5 {
     @Test
     fun part1() {
         sample.filter { it.straight }.overlaps() shouldBe 5
-        println("Day  5, Puzzle 1: ${data.filter { it.straight }.overlaps()} overlaps")
+        println("Day  5, Part 1: ${data.filter { it.straight }.overlaps()} overlaps")
     }
 
     @Test
     fun part2() {
         sample.overlaps() shouldBe 12
-        println("Day  5, Puzzle 2: ${data.overlaps()} overlaps")
+        println("Day  5, Part 2: ${data.overlaps()} overlaps")
     }
 
     fun List<Line>.overlaps() = flatMap { it.points }

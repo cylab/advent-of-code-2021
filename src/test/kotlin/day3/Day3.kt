@@ -15,13 +15,13 @@ class Day3 {
     @Test
     fun part1() {
         sample.gammaAndEpsilon() shouldBe 198
-        println("Day  3, Puzzle 1: ${data.gammaAndEpsilon()} ratings")
+        println("Day  3, Part 1: ${data.gammaAndEpsilon()} ratings")
     }
 
     @Test
     fun part2() {
         sample.oxygenAndCO2() shouldBe 230
-        println("Day  3, Puzzle 2: ${data.oxygenAndCO2()} ratings")
+        println("Day  3, Part 2: ${data.oxygenAndCO2()} ratings")
     }
 
 

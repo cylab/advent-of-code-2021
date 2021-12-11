@@ -26,13 +26,13 @@ class Day10 {
     @Test
     fun part1() {
         sample.corruption() shouldBe 26397
-        println("Day 10, Puzzle 1: ${data.corruption()} corruption score")
+        println("Day 10, Part 1: ${data.corruption()} corruption score")
     }
 
     @Test
     fun part2() {
         sample.incompleteness() shouldBe 288957
-        println("Day 10, Puzzle 1: ${data.incompleteness()} incompleteness score")
+        println("Day 10, Part 1: ${data.incompleteness()} incompleteness score")
         data.incompleteness() shouldNotBe 44087106 // my first wrong solution due to using Int instead of Long! :((
     }
 

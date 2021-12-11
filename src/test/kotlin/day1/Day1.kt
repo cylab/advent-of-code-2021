@@ -13,13 +13,13 @@ class Day1 {
     @Test
     fun part1() {
         sample.countIncrements() shouldBe 7
-        println("Day  1, Puzzle 1: ${data.countIncrements()} increments")
+        println("Day  1, Part 1: ${data.countIncrements()} increments")
     }
 
     @Test
     fun part2() {
         sample.countIncrements(3) shouldBe 5
-        println("Day  1, Puzzle 2: ${data.countIncrements(3)} increments")
+        println("Day  1, Part 2: ${data.countIncrements(3)} increments")
     }
 
 

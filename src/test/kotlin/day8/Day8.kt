@@ -18,13 +18,13 @@ class Day8 {
     @Test
     fun part1() {
         sample.count1478() shouldBe 26
-        println("Day  8, Puzzle 1: ${data.count1478()} easy codes")
+        println("Day  8, Part 1: ${data.count1478()} easy codes")
     }
 
     @Test
     fun part2() {
         sample.sumValues() shouldBe 61229
-        println("Day  8, Puzzle 2: ${data.sumValues()} summed values")
+        println("Day  8, Part 2: ${data.sumValues()} summed values")
     }
 
     fun Input.count1478() = flatMap { it.display }.count { it.is1478() }

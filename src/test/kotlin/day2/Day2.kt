@@ -13,13 +13,13 @@ class Day2 {
     @Test
     fun part1() {
         sample.posAndDepth() shouldBe 150
-        println("Day  2, Puzzle 1: ${data.posAndDepth()} combined steering")
+        println("Day  2, Part 1: ${data.posAndDepth()} combined steering")
     }
 
     @Test
     fun part2() {
         sample.posAndAim() shouldBe 900
-        println("Day  2, Puzzle 2: ${data.posAndAim()} combined steering")
+        println("Day  2, Part 2: ${data.posAndAim()} combined steering")
     }
 
 
