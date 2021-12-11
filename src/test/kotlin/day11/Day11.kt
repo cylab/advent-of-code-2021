@@ -13,7 +13,7 @@ operator fun Point.plus(other: Point) = x + other.x to y + other.y
 
 class Day11 {
 
-    data class Grid(val data: List<MutableList<Int>>, val xMax: Int, val yMax: Int, val size: Int)
+    data class Grid(val data: List<MutableList<Int>>, val xMax: Int, val yMax: Int, val all: Int)
 
     // make sure to read fresh data on each call
     val sample get() = parse("sample.txt")
@@ -32,27 +32,27 @@ class Day11 {
 
     @Test
     fun part2() {
-        sample.stepWhereAllFlash() shouldBe 195
-        println("Day 11, Part 2: ${data.stepWhereAllFlash()}. step")
+        sample.allFlash() shouldBe 195
+        println("Day 11, Part 2: ${data.allFlash()}. step")
     }
 
-    fun Grid.countFlashes() = (1..100).sumOf { step() }
+    fun Grid.countFlashes() = (1..100).sumOf { stepFlashes() }
 
-    fun Grid.stepWhereAllFlash() = (1..MAX_VALUE).asSequence().first { step() == size }
+    fun Grid.allFlash() = (1..MAX_VALUE).first { stepFlashes() == all }
 
-    fun Grid.step(): Int {
+    fun Grid.stepFlashes(): Int {
         var count = 0
         var visit = points()
         do {
             val flashes = visit
-                .onEach { p -> data[p.y][p.x] += 1 }
-                .filter { p -> data[p.y][p.x] >= 10 }
-                .onEach { p -> data[p.y][p.x] = 0 }
+                .onEach { data[it.y][it.x] += 1 }
+                .filter { data[it.y][it.x] >= 10 }
+                .onEach { data[it.y][it.x] = 0 }
                 .distinct() // make sure to not visit neigbours of the same octopus twice!
             count += flashes.size
             visit = flashes
                 .flatMap { adjacent(it) }
-                .filter { p -> data[p.y][p.x] > 0 } // ignore already flashed in this step!
+                .filter { data[it.y][it.x] > 0 } // ignore already flashed in this step!
         } while (visit.isNotEmpty())
         return count
     }
