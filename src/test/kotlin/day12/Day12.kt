@@ -26,7 +26,7 @@ class Day12 {
     fun Graph.findPaths(name: String = "start", path: Path = listOf(), allowedTwice: Int): List<Path> =
         when {
             name == "end" -> listOf(path + name)
-            name == "start" -> emptyList()
+            name == "start" && path.isNotEmpty() -> emptyList()
             path.noRevisit(name, allowedTwice) -> emptyList()
             else -> targets(name).flatMap { findPaths(it, path + name, allowedTwice) }
         }
