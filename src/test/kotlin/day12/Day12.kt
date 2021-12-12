@@ -32,12 +32,13 @@ class Day12 {
         }
 
     fun Path.noRevisit(name: String, allowedTwice: Int) = contains(name) && name.isSmall() &&
-        filter { it.isSmall() }.groupingBy { it }.eachCount().filter { it.value >= 2 }
-            .count() == allowedTwice
+        filter { it.isSmall() }.groupingBy { it }.eachCount().filter { it.value >= 2 }.count() == allowedTwice
+
 
     fun Graph.targets(name: String) = get(name)!!.value
 
     fun String.isSmall() = this[0].isLowerCase()
+
 
     fun parse(resource: String) = this.javaClass.getResource(resource)
         .readText()
