@@ -13,27 +13,27 @@ class Day12 {
 
     @Test
     fun part1() {
-        sample.findPaths(allowedTwice = 0).count() shouldBe 226
-        println("Day  2, Part 1: ${data.findPaths(allowedTwice = 0).count()} paths")
+        sample.findPaths(smallTwice = 0).count() shouldBe 226
+        println("Day  2, Part 1: ${data.findPaths(smallTwice = 0).count()} paths")
     }
 
     @Test
     fun part2() {
-        sample.findPaths(allowedTwice = 1).count() shouldBe 3509
-        println("Day  2, Part 2: ${data.findPaths(allowedTwice = 1).count()} paths")
+        sample.findPaths(smallTwice = 1).count() shouldBe 3509
+        println("Day  2, Part 2: ${data.findPaths(smallTwice = 1).count()} paths")
     }
 
 
-    fun Graph.findPaths(name: String = "start", path: Path = listOf(), allowedTwice: Int): List<Path> =
+    fun Graph.findPaths(name: String = "start", path: Path = listOf(), smallTwice: Int): List<Path> =
         when {
             name == "end" -> listOf(path + name)
             name == "start" && path.isNotEmpty() -> emptyList()
-            path.noRevisit(name, allowedTwice) -> emptyList()
-            else -> targets(name).flatMap { findPaths(it, path + name, allowedTwice) }
+            path.noRevisit(name, smallTwice) -> emptyList()
+            else -> targets(name).flatMap { findPaths(it, path + name, smallTwice) }
         }
 
-    fun Path.noRevisit(name: String, allowedTwice: Int) = contains(name) && name.isSmall() &&
-        groupingBy { it }.eachCount().count { it.key.isSmall() && it.value >= 2 } == allowedTwice
+    fun Path.noRevisit(name: String, smallTwice: Int) = contains(name) && name.isSmall() &&
+        groupingBy { it }.eachCount().count { it.key.isSmall() && it.value >= 2 } == smallTwice
 
 
     fun Graph.targets(name: String) = get(name)!!.value
