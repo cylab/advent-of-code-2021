@@ -24,7 +24,6 @@ class Day12 {
     }
 
     fun Graph.findPaths(name: String = "start", path: Path = listOf(), allowedTwice: Int = 0): List<Path> {
-        val node = get(name)!!
         val visitedTwice = path.filter { it.isSmall() }
             .groupingBy { it }.eachCount().filter { it.value >= 2 }
 
@@ -34,7 +33,7 @@ class Day12 {
         return when {
             name == "end" -> listOf(path + name)
             noRevisit && path.contains(name) -> emptyList()
-            else -> node.value.flatMap { findPaths(it, path + name, allowedTwice) }
+            else -> get(name)!!.value.flatMap { findPaths(it, path + name, allowedTwice) }
         }
     }
 

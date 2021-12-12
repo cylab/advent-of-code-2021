@@ -1,6 +1,5 @@
 package day1
 
-import day10.Day10
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
