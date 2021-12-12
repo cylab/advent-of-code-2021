@@ -23,19 +23,19 @@ class Day12 {
         println("Day  2, Part 2: ${data.findPaths(allowedTwice = 1).count()} paths")
     }
 
-    fun Graph.findPaths(name: String = "start", path: Path = listOf(), allowedTwice: Int = 0): List<Path> {
-        val visitedTwice = path.filter { it.isSmall() }
-            .groupingBy { it }.eachCount().filter { it.value >= 2 }
-
-        val noRevisit = name == "start" ||
-            name.isSmall() && visitedTwice.count() == allowedTwice
-
-        return when {
+    fun Graph.findPaths(name: String = "start", path: Path = listOf(), allowedTwice: Int): List<Path> =
+        when {
             name == "end" -> listOf(path + name)
-            noRevisit && path.contains(name) -> emptyList()
-            else -> get(name)!!.value.flatMap { findPaths(it, path + name, allowedTwice) }
+            name == "start" -> emptyList()
+            path.noRevisit(name, allowedTwice) -> emptyList()
+            else -> targets(name).flatMap { findPaths(it, path + name, allowedTwice) }
         }
-    }
+
+    fun Path.noRevisit(name: String, allowedTwice: Int) = contains(name) && name.isSmall() &&
+        filter { it.isSmall() }.groupingBy { it }.eachCount().filter { it.value >= 2 }
+            .count() == allowedTwice
+
+    fun Graph.targets(name: String) = get(name)!!.value
 
     fun String.isSmall() = this[0].isLowerCase()
 
