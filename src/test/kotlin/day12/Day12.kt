@@ -32,7 +32,7 @@ class Day12 {
         }
 
     fun Path.noRevisit(name: String, allowedTwice: Int) = contains(name) && name.isSmall() &&
-        filter { it.isSmall() }.groupingBy { it }.eachCount().filter { it.value >= 2 }.count() == allowedTwice
+        groupingBy { it }.eachCount().count { it.key.isSmall() && it.value >= 2 } == allowedTwice
 
 
     fun Graph.targets(name: String) = get(name)!!.value
