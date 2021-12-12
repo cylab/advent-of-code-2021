@@ -23,6 +23,7 @@ class Day12 {
         println("Day  2, Part 2: ${data.findPaths(allowedTwice = 1).count()} paths")
     }
 
+
     fun Graph.findPaths(name: String = "start", path: Path = listOf(), allowedTwice: Int): List<Path> =
         when {
             name == "end" -> listOf(path + name)
