@@ -64,10 +64,14 @@ class Day13 {
         .let { segments ->
             Input(
                 segments.first.map { Point(it[0].toInt(), it[1].toInt()) },
-                segments.second.map { if (it[2] == "x") Point(it[3].toInt(), 0) else Point(0, it[3].toInt()) }
+                segments.second.map {
+                    when (it[2] == "x") {
+                        true -> Point(it[3].toInt(), 0)
+                        else -> Point(0, it[3].toInt())
+                    }
+                }
             )
         }
-
 }
 
 fun main() = Day13().run {
