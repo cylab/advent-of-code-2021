@@ -24,12 +24,12 @@ class Day13 {
     @Test
     fun part2() {
         sample.folded().plotted().trim() shouldBe """
-                #####
-                #   #
-                #   #
-                #   #
-                #####
-            """.trimIndent()
+                                                  #####
+                                                  #   #
+                                                  #   #
+                                                  #   #
+                                                  #####
+                                                  """.trimIndent()
         println("Day 13, Part 2:\n${data.folded().plotted()}")
     }
 
