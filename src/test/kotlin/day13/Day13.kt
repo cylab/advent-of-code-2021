@@ -43,7 +43,7 @@ class Day13 {
         }
         .toSet()
 
-    fun foldAt(f: Int, p: Int) = if (p > f) abs(f * 2 - p) else p
+    fun foldAt(n: Int, v: Int) = if (v > n) abs(n * 2 - v) else v
 
 
     fun Set<Point>.plotted(): String {
