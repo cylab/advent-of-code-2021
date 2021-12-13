@@ -25,13 +25,12 @@ class Day13 {
     @Test
     fun part2() {
         sample.dotsAfterFolds().plotted().trim() shouldBe """
-            #####
-            #   #
-            #   #
-            #   #
-            #####
-        """.trimIndent()
-        println(sample.dotsAfterFolds())
+                #####
+                #   #
+                #   #
+                #   #
+                #####
+            """.trimIndent()
         println("Day 12, Part 2:\n${data.dotsAfterFolds().plotted()}")
     }
 
