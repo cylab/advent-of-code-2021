@@ -24,13 +24,13 @@ class Day12 {
     }
 
 
-    fun Graph.findPaths(name: String = "start", path: Path = listOf(), smallTwice: Int): List<Path> =
-        when {
-            name == "end" -> listOf(path + name)
-            name == "start" && path.isNotEmpty() -> emptyList()
-            path.noRevisit(name, smallTwice) -> emptyList()
-            else -> targets(name).flatMap { findPaths(it, path + name, smallTwice) }
+    fun Graph.findPaths(name: String = "start", path: Path = listOf(), smallTwice: Int): List<Path> = when {
+        name == "end" -> listOf(path + name)
+        path.noRevisit(name, smallTwice) -> emptyList()
+        else -> targets(name).flatMap {
+            findPaths(it, path + name, smallTwice)
         }
+    }
 
     fun Path.noRevisit(name: String, smallTwice: Int) = contains(name) && name.isSmall() &&
         groupingBy { it }.eachCount().count { it.key.isSmall() && it.value >= 2 } == smallTwice
@@ -47,6 +47,7 @@ class Day12 {
         .filter { it.isNotBlank() }
         .map { it.trim().split(Regex("\\W+")) }
         .flatMap { listOf(it, it.reversed()) } // duplicate outgoing edges as incoming
+        .filterNot { it[1] == "start" } // we don't care about paths that lead to "start"
         .groupBy({ it[0] }, { it[1] })
         .mapValues { it }
 
