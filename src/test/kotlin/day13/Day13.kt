@@ -35,11 +35,17 @@ class Day13 {
         println("Day 12, Part 2:\n${data.dotsAfterFolds().plotted()}")
     }
 
+
     fun Input.dotsAfterFolds(numFolds: Int = folds.size) = points
         .map {
-            (0 until numFolds).fold(it) { p, n -> Point(foldAt(folds[n].x, p.x), foldAt(folds[n].y, p.y)) }
+            (0 until numFolds).fold(it) { p, n ->
+                Point(foldAt(folds[n].x, p.x), foldAt(folds[n].y, p.y))
+            }
         }
         .toSet()
+
+    fun foldAt(f: Int, p: Int) = if (p > f) abs(f * 2 - p) else p
+
 
     fun Set<Point>.plotted(): String {
         val max = Point(maxOf { it.x }, maxOf { it.y })
@@ -53,7 +59,6 @@ class Day13 {
         return sheet
     }
 
-    fun foldAt(f: Int, p: Int) = if (p > f) abs(f * 2 - p) else p
 
     fun parse(resource: String) = this.javaClass.getResource(resource)
         .readText()
