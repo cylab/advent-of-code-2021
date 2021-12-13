@@ -19,7 +19,7 @@ class Day13 {
     @Test
     fun part1() {
         sample.dotsAfterFolds(1).count() shouldBe 17
-        println("Day 12, Part 1: ${data.dotsAfterFolds(1).count()} points")
+        println("Day 13, Part 1: ${data.dotsAfterFolds(1).count()} points")
     }
 
     @Test
@@ -31,7 +31,7 @@ class Day13 {
                 #   #
                 #####
             """.trimIndent()
-        println("Day 12, Part 2:\n${data.dotsAfterFolds().plotted()}")
+        println("Day 13, Part 2:\n${data.dotsAfterFolds().plotted()}")
     }
 
 
