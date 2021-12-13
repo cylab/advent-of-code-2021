@@ -17,32 +17,31 @@ class Day13 {
 
     @Test
     fun part1() {
-        sample.dotsAfterFolds(1).count() shouldBe 17
-        println("Day 13, Part 1: ${data.dotsAfterFolds(1).count()} points")
+        sample.folded(1).count() shouldBe 17
+        println("Day 13, Part 1: ${data.folded(1).count()} points")
     }
 
     @Test
     fun part2() {
-        sample.dotsAfterFolds().plotted().trim() shouldBe """
+        sample.folded().plotted().trim() shouldBe """
                 #####
                 #   #
                 #   #
                 #   #
                 #####
             """.trimIndent()
-        println("Day 13, Part 2:\n${data.dotsAfterFolds().plotted()}")
+        println("Day 13, Part 2:\n${data.folded().plotted()}")
     }
 
 
-    fun Input.dotsAfterFolds(numFolds: Int = folds.size) = points
-        .map {
-            (0 until numFolds).fold(it) { p, n ->
-                Point(foldAt(folds[n].x, p.x), foldAt(folds[n].y, p.y))
-            }
+    fun Input.folded(numFolds: Int = folds.size) = points
+        .map { origin ->
+            (0 until numFolds).map { n -> folds[n] }
+                .fold(origin) { p, f -> Point(foldAt(f.x, p.x), foldAt(f.y, p.y)) }
         }
         .toSet()
 
-    fun foldAt(n: Int, v: Int) = if (n in 1..v) n * 2 - v else v
+    fun foldAt(f: Int, v: Int) = if (f in 1..v) f * 2 - v else v
 
 
     fun Set<Point>.plotted(): String {
