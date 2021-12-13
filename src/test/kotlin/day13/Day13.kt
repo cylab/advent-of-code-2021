@@ -37,11 +37,11 @@ class Day13 {
     fun Input.folded(numFolds: Int = folds.size) = points
         .map { origin ->
             (0 until numFolds).map { n -> folds[n] }
-                .fold(origin) { p, f -> Point(foldAt(f.x, p.x), foldAt(f.y, p.y)) }
+                .fold(origin) { point, fold -> Point(foldAt(fold.x, point.x), foldAt(fold.y, point.y)) }
         }
         .toSet()
 
-    fun foldAt(f: Int, v: Int) = if (f in 1..v) f * 2 - v else v
+    fun foldAt(pos: Int, v: Int) = if (pos in 1..v) pos * 2 - v else v
 
 
     fun Set<Point>.plotted(): String {
@@ -63,13 +63,13 @@ class Day13 {
         .filter { it.isNotBlank() }
         .map { it.trim().split(Regex("\\W+")) }
         .partition { it[0] != "fold" }
-        .let { segments ->
+        .let { (points, folds) ->
             Input(
-                segments.first.map { Point(it[0].toInt(), it[1].toInt()) },
-                segments.second.map {
-                    when (it[2] == "x") {
-                        true -> Point(it[3].toInt(), 0)
-                        else -> Point(0, it[3].toInt())
+                points.map { (x, y) -> Point(x.toInt(), y.toInt()) },
+                folds.map { (_, _, axis, pos) ->
+                    when (axis) {
+                        "x" -> Point(pos.toInt(), 0)
+                        else -> Point(0, pos.toInt())
                     }
                 }
             )
