@@ -2,7 +2,6 @@ package day13
 
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
-import kotlin.math.abs
 
 // poor mans point type
 typealias Point = Pair<Int, Int>
@@ -43,7 +42,7 @@ class Day13 {
         }
         .toSet()
 
-    fun foldAt(n: Int, v: Int) = if (v > n) abs(n * 2 - v) else v
+    fun foldAt(n: Int, v: Int) = if (n in 1..v) n * 2 - v else v
 
 
     fun Set<Point>.plotted(): String {
