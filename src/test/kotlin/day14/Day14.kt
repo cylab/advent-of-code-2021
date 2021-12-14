@@ -41,7 +41,7 @@ class Day14 {
 
 
     fun Input.recursePair(pair: String, numSteps: Int): Map<Char, Long> {
-        val cacheKey = "$pair|$numSteps)"
+        val cacheKey = "$pair|$numSteps"
         cache[cacheKey]?.let { return it }
         if (numSteps == 0) return emptyMap()
         val result = (rules.firstOrNull { rule -> pair.first() == rule.first() && pair.getOrNull(1) == rule.last() }
