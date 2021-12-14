@@ -3,15 +3,16 @@ package day14
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
+typealias Rule = List<Char>
+typealias Prevalence = Map<Char, Long>
+
 class Day14 {
-    data class Input(
-        val template: String,
-        val rules: List<String>,
-        val cache: MutableMap<String, Map<Char, Long>> = mutableMapOf()
-    )
+    data class Input(val template: String, val rules: List<Rule>)
 
     val sample = parse("sample.txt")
     val data = parse("data.txt")
+
+    val cache: MutableMap<String, Prevalence> = mutableMapOf()
 
     @Test
     fun part1() {
@@ -26,37 +27,31 @@ class Day14 {
     }
 
 
-    fun Input.deltaCommon(numSteps: Int): Long {
-        val prevalence = countPrevalence(numSteps).values.sortedDescending()
-        return with(prevalence) { first() - last() }
-    }
+    fun Input.deltaCommon(numSteps: Int) =
+        countPrevalence(numSteps).values.sortedDescending().run { first() - last() }
 
-    fun Input.countPrevalence(numSteps: Int): Map<Char, Long> {
-        return template.windowed(2)
-            .flatMap { pair -> recursePair(pair, numSteps).toList() }
-            .plus(template.map { it to 1L })
-            .groupBy({ it.first }, { it.second })
-            .mapValues { it.value.sum() }
-    }
+    fun Input.countPrevalence(numSteps: Int) = template.windowed(2)
+        .flatMap { pair -> insertedPrevalence(pair, numSteps).toList() }
+        .plus(template.map { it to 1L })
+        .groupBy({ it.first }, { it.second })
+        .mapValues { it.value.sum() }
 
 
-    fun Input.recursePair(pair: String, numSteps: Int): Map<Char, Long> {
-        val cacheKey = "$pair|$numSteps"
-        cache[cacheKey]?.let { return it }
-        if (numSteps == 0) return emptyMap()
-        val result = (rules.firstOrNull { rule -> pair.first() == rule.first() && pair.getOrNull(1) == rule.last() }
-            ?.let { rule ->
-                val left = recursePair(rule.slice(0..1), numSteps - 1).toList()
-                val right = recursePair(rule.slice(1..2), numSteps - 1).toList()
-                (left + right + Pair(rule[1], 1L))
+    fun Input.insertedPrevalence(pair: String, n: Int): Prevalence = when {
+        n == 0 -> emptyMap()
+        else -> rules
+            .firstOrNull { (l, r, _) -> pair[0] == l && pair[1] == r }
+            ?.let { (l, r, insert) ->
+                val pL = cache("$l$insert|$n") { insertedPrevalence("$l$insert", n - 1) }
+                val pR = cache("$insert$r|$n") { insertedPrevalence("$insert$r", n - 1) }
+                (pL.toList() + pR.toList() + Pair(insert, 1L))
                     .groupBy({ it.first }, { it.second })
                     .mapValues { it.value.sum() }
             }
-            ?: emptyMap())
-        cache[cacheKey] = result
-        return result
+            ?: emptyMap()
     }
 
+    fun cache(key: String, supplier: () -> Prevalence) = cache[key] ?: supplier().also { cache[key] = it }
 
     fun parse(resource: String) = this.javaClass.getResource(resource)
         .readText()
@@ -67,7 +62,7 @@ class Day14 {
         .let { (templates, rules) ->
             Input(
                 templates[0],
-                rules.map { "${it[0]}${it.last()}${it[1]}" }
+                rules.map { it.replace(Regex("\\W+"), "").toList() }
             )
         }
 }
