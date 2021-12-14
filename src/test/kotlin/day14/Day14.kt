@@ -37,18 +37,20 @@ class Day14 {
         .mapValues { it.value.sum() }
 
 
-    fun Input.insertedPrevalence(pair: String, n: Int): Prevalence = when {
-        n == 0 -> emptyMap()
-        else -> rules
-            .firstOrNull { (l, r, _) -> pair[0] == l && pair[1] == r }
-            ?.let { (l, r, insert) ->
-                val pL = cache("$l$insert|$n") { insertedPrevalence("$l$insert", n - 1) }
-                val pR = cache("$insert$r|$n") { insertedPrevalence("$insert$r", n - 1) }
-                (pL.toList() + pR.toList() + Pair(insert, 1L))
-                    .groupBy({ it.first }, { it.second })
-                    .mapValues { it.value.sum() }
-            }
-            ?: emptyMap()
+    fun Input.insertedPrevalence(pair: String, n: Int): Prevalence = cache("$pair$n") {
+        when (n) {
+            0 -> emptyMap()
+            else -> rules
+                .firstOrNull { (l, r, _) -> pair[0] == l && pair[1] == r }
+                ?.let { (l, r, insert) ->
+                    val pL = insertedPrevalence("$l$insert", n - 1)
+                    val pR = insertedPrevalence("$insert$r", n - 1)
+                    (pL.toList() + pR.toList() + Pair(insert, 1L))
+                        .groupBy({ it.first }, { it.second })
+                        .mapValues { it.value.sum() }
+                }
+                ?: emptyMap()
+        }
     }
 
     fun cache(key: String, supplier: () -> Prevalence) = cache[key] ?: supplier().also { cache[key] = it }
