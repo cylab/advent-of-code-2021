@@ -32,25 +32,22 @@ class Day14 {
 
 
     fun Input.countPrevalence(numSteps: Int) = template.windowed(2)
-        .flatMap { pair -> insertedPrevalence(pair, numSteps).toList() }
+        .flatMap { pair -> prevalenceBetween(pair, numSteps).toList() }
         .plus(template.map { it to 1L })
         .groupBy({ it.first }, { it.second })
         .mapValues { it.value.sum() }
 
-    fun Input.insertedPrevalence(pair: String, n: Int): Prevalence = cache("$pair$n") {
-        when (n) {
-            0 -> emptyMap()
-            else -> rules
-                .firstOrNull { (l, r, _) -> pair[0] == l && pair[1] == r }
-                ?.let { (l, r, insert) ->
-                    val pL = insertedPrevalence("$l$insert", n - 1)
-                    val pR = insertedPrevalence("$insert$r", n - 1)
-                    (pL.toList() + pR.toList() + Pair(insert, 1L))
-                        .groupBy({ it.first }, { it.second })
-                        .mapValues { it.value.sum() }
-                }
-                ?: emptyMap()
-        }
+    fun Input.prevalenceBetween(pair: String, n: Int): Prevalence = cache("$pair$n") {
+        rules.takeIf { n > 0 }
+            ?.firstOrNull { (left, right) -> "$left$right" == pair }
+            ?.let { (left, right, insert) ->
+                val pLeft = prevalenceBetween("$left$insert", n - 1)
+                val pRight = prevalenceBetween("$insert$right", n - 1)
+                (pLeft.toList() + pRight.toList() + (insert to 1L))
+                    .groupBy({ it.first }, { it.second })
+                    .mapValues { it.value.sum() }
+            }
+            ?: emptyMap()
     }
 
     fun cache(key: String, supplier: () -> Prevalence) = cache[key] ?: supplier().also { cache[key] = it }
