@@ -30,12 +30,12 @@ class Day14 {
     fun Input.deltaCommon(numSteps: Int) =
         countPrevalence(numSteps).values.sortedDescending().run { first() - last() }
 
+
     fun Input.countPrevalence(numSteps: Int) = template.windowed(2)
         .flatMap { pair -> insertedPrevalence(pair, numSteps).toList() }
         .plus(template.map { it to 1L })
         .groupBy({ it.first }, { it.second })
         .mapValues { it.value.sum() }
-
 
     fun Input.insertedPrevalence(pair: String, n: Int): Prevalence = cache("$pair$n") {
         when (n) {
