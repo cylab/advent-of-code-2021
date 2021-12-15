@@ -32,7 +32,7 @@ class Day14 {
 
     fun Input.countPrevalence(sequence: String = template, added: String = template, numSteps: Int) =
         sequence.windowed(2)
-            .flatMap { prevalenceBetween(it, numSteps) }
+            .flatMap { pair -> prevalenceBetween(pair, numSteps) }
             .plus(added.map { it to 1L })
             .groupBy({ it.first }, { it.second })
             .mapValues { it.value.sum() }
