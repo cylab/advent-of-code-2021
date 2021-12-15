@@ -3,11 +3,10 @@ package day14
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-typealias Rule = List<Char>
-typealias Prevalence = Map<Char, Long>
+typealias Prevalence = List<Pair<Char, Long>>
 
 class Day14 {
-    data class Input(val template: String, val rules: List<Rule>)
+    data class Input(val template: String, val rules: List<String>)
 
     val sample = parse("sample.txt")
     val data = parse("data.txt")
@@ -28,26 +27,22 @@ class Day14 {
 
 
     fun Input.deltaCommon(numSteps: Int) =
-        countPrevalence(numSteps).values.sortedDescending().run { first() - last() }
+        countPrevalence(numSteps = numSteps).map { it.second }.sortedDescending().run { first() - last() }
 
 
-    fun Input.countPrevalence(numSteps: Int) = template.windowed(2)
-        .flatMap { pair -> prevalenceBetween(pair, numSteps).toList() }
-        .plus(template.map { it to 1L })
-        .groupBy({ it.first }, { it.second })
-        .mapValues { it.value.sum() }
+    fun Input.countPrevalence(sequence: String = template, added: String = template, numSteps: Int) =
+        sequence.windowed(2)
+            .flatMap { prevalenceBetween(it, numSteps) }
+            .plus(added.map { it to 1L })
+            .groupBy({ it.first }, { it.second })
+            .mapValues { it.value.sum() }
+            .toList()
 
     fun Input.prevalenceBetween(pair: String, n: Int): Prevalence = cache("$pair$n") {
         rules.takeIf { n > 0 }
-            ?.firstOrNull { (left, right) -> "$left$right" == pair }
-            ?.let { (left, right, insert) ->
-                val pLeft = prevalenceBetween("$left$insert", n - 1)
-                val pRight = prevalenceBetween("$insert$right", n - 1)
-                (pLeft.toList() + pRight.toList() + (insert to 1L))
-                    .groupBy({ it.first }, { it.second })
-                    .mapValues { it.value.sum() }
-            }
-            ?: emptyMap()
+            ?.firstOrNull { rule -> "${rule.first()}${rule.last()}" == pair }
+            ?.let { rule -> countPrevalence(rule, rule.slice(1..1), n - 1) }
+            ?: emptyList()
     }
 
     fun cache(key: String, supplier: () -> Prevalence) = cache[key] ?: supplier().also { cache[key] = it }
@@ -61,7 +56,7 @@ class Day14 {
         .let { (templates, rules) ->
             Input(
                 templates[0],
-                rules.map { it.replace(Regex("\\W+"), "").toList() }
+                rules.map { "${it[0]}${it.last()}${it[1]}" }
             )
         }
 }
