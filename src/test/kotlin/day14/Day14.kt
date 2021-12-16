@@ -27,21 +27,21 @@ class Day14 {
 
 
     fun Input.deltaCommon(numSteps: Int) =
-        countPrevalence(numSteps = numSteps).map { it.second }.sortedDescending().run { first() - last() }
+        countPrevalence(numSteps).map { it.second }.sortedDescending().run { first() - last() }
 
 
-    fun Input.countPrevalence(sequence: String = template, added: String = template, numSteps: Int) =
+    fun Input.countPrevalence(n: Int, sequence: String = template, added: String = template) =
         sequence.windowed(2)
-            .flatMap { pair -> prevalenceBetween(pair, numSteps) }
+            .flatMap { pair -> prevalenceBetween(n, pair) }
             .plus(added.map { it to 1L })
             .groupBy({ it.first }, { it.second })
             .mapValues { it.value.sum() }
             .toList()
 
-    fun Input.prevalenceBetween(pair: String, n: Int): Prevalence = cache("$pair$n") {
+    fun Input.prevalenceBetween(n: Int, pair: String): Prevalence = cache("$pair$n") {
         rules.takeIf { n > 0 }
             ?.firstOrNull { rule -> "${rule.first()}${rule.last()}" == pair }
-            ?.let { rule -> countPrevalence(rule, rule.slice(1..1), n - 1) }
+            ?.let { rule -> countPrevalence(n - 1, rule, rule.slice(1..1)) }
             ?: emptyList()
     }
 
