@@ -2,7 +2,7 @@ package day16
 
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
-import kotlin.Int.Companion.MAX_VALUE as ALL_CONTAINED
+import kotlin.Int.Companion.MAX_VALUE as ALL
 
 typealias Input = String
 
@@ -22,7 +22,7 @@ class Day16 {
 
     @Test
     fun part1() {
-        "38006F45291200".hexToBits().iterator().findPackets()
+        "38006F45291200".hexToBits().iterator().readPackets()
         sample.iterator().sumVersions() shouldBe 31
         println("Day  16, Part 1: ${data.iterator().sumVersions()} version sum")
     }
@@ -35,7 +35,7 @@ class Day16 {
 
     fun BIter.sumVersions() = nextPacket().plusSubPackets().sumOf { it.version }
 
-    private fun BIter.nextPacket(): Packet {
+    fun BIter.nextPacket(): Packet {
         val version = nextValue(3)
         return when (val typeId = nextValue(3)) {
             4 -> Packet(version, typeId, literal = nextLiteral())
@@ -43,12 +43,21 @@ class Day16 {
         }
     }
 
-    private fun BIter.nextSubPakets() = when {
-        nextValue() == 0 -> next(nextValue(15)).iterator().findPackets(ALL_CONTAINED)
-        else -> findPackets(nextValue(11))
+    fun BIter.nextLiteral(): Long {
+        var bits = ""
+        do {
+            val keepReading = nextValue() == 1
+            bits += nextChunk(4)
+        } while (keepReading)
+        return bits.toLong(2)
     }
 
-    fun BIter.findPackets(num: Int = 1): List<Packet> {
+    fun BIter.nextSubPakets() = when (nextValue()) {
+        1 -> readPackets(nextValue(11))
+        else -> nextChunk(nextValue(15)).iterator().readPackets(ALL)
+    }
+
+    fun BIter.readPackets(num: Int = 1): List<Packet> {
         val packets = mutableListOf<Packet>()
         for (c in 1..num) {
             packets.add(nextPacket())
@@ -58,18 +67,10 @@ class Day16 {
         return packets
     }
 
-    fun Packet.plusSubPackets(): List<Packet> = listOf(this) + subPackets.flatMap { it.plusSubPackets() }
+    fun BIter.nextChunk(num: Int) = (1..num).map { next() }.joinToString("")
+    fun BIter.nextValue(num: Int = 1) = nextChunk(num).toInt(2)
 
-    fun BIter.next(num: Int) = (1..num).map { next() }.joinToString("")
-    fun BIter.nextValue(num: Int = 1) = next(num).toInt(2)
-    fun BIter.nextLiteral(): Long {
-        var bits = ""
-        do {
-            val keepReading = nextValue() == 1
-            bits += next(4)
-        } while (keepReading)
-        return bits.toLong(2)
-    }
+    fun Packet.plusSubPackets(): List<Packet> = listOf(this) + subPackets.flatMap { it.plusSubPackets() }
 
     fun String.hexToBits() = trim().flatMap {
         "%4s".format(it.toString().toInt(16).toString(2)).replace(' ', '0').toList()
