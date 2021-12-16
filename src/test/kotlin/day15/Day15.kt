@@ -53,7 +53,7 @@ class Day15 {
         val cameFrom = mutableMapOf(start to Point(-1, -1))
         val costSoFar = mutableMapOf(start to 0)
         while (frontier.isNotEmpty()) {
-            val current = frontier.remove().second
+            val (_, current) = frontier.remove()
             if (current == goal) {
                 break
             }
