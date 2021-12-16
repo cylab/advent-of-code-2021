@@ -61,8 +61,9 @@ class Day15 {
                 .forEach { next ->
                     val newCost = costSoFar[current]!! + risk(next)
                     if (next !in costSoFar || newCost < costSoFar[next]!!) {
-                        val priority = newCost + (abs(goal.x - next.x) + abs(goal.y - next.y))
                         costSoFar[next] = newCost
+                        // cost + Manhattan distance on a square grid
+                        val priority = newCost + (abs(goal.x - next.x) + abs(goal.y - next.y))
                         frontier.add(priority to next)
                         cameFrom[next] = current
                     }
