@@ -2,7 +2,7 @@ package day16
 
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
-import kotlin.Int.Companion.MAX_VALUE
+import kotlin.Int.Companion.MAX_VALUE as ALL_CONTAINED
 
 typealias Input = String
 
@@ -22,7 +22,7 @@ class Day16 {
 
     @Test
     fun part1() {
-        "38006F45291200".hexToBits().iterator().unpack()
+        "38006F45291200".hexToBits().iterator().findPackets()
         sample.iterator().sumVersions() shouldBe 31
         println("Day  16, Part 1: ${data.iterator().sumVersions()} version sum")
     }
@@ -33,28 +33,32 @@ class Day16 {
 //        println("Day  16, Part 2: ${data.versionSum()} version sum")
     }
 
-    fun BIter.sumVersions() = unpack().first().withSubPackets().sumOf { it.version }
+    fun BIter.sumVersions() = nextPacket().plusSubPackets().sumOf { it.version }
 
-    fun BIter.unpack(num: Int = 1): List<Packet> {
+    private fun BIter.nextPacket(): Packet {
+        val version = nextValue(3)
+        return when (val typeId = nextValue(3)) {
+            4 -> Packet(version, typeId, literal = nextLiteral())
+            else -> Packet(version, typeId, subPackets = nextSubPakets())
+        }
+    }
+
+    private fun BIter.nextSubPakets() = when {
+        nextValue() == 0 -> next(nextValue(15)).iterator().findPackets(ALL_CONTAINED)
+        else -> findPackets(nextValue(11))
+    }
+
+    fun BIter.findPackets(num: Int = 1): List<Packet> {
         val packets = mutableListOf<Packet>()
         for (c in 1..num) {
-            val version = nextValue(3)
-            val typeId = nextValue(3)
-            if (typeId == 4) {
-                packets.add(Packet(version, typeId, literal = nextLiteral()))
-            } else {
-                val lengthId = nextValue()
-                val subPackets = when (lengthId) {
-                    0 -> next(nextValue(15)).iterator().unpack(MAX_VALUE)
-                    else -> unpack(nextValue(11))
-                }
-                packets.add(Packet(version, typeId, subPackets = subPackets))
-            }
+            packets.add(nextPacket())
             if (!hasNext())
                 break
         }
         return packets
     }
+
+    fun Packet.plusSubPackets(): List<Packet> = listOf(this) + subPackets.flatMap { it.plusSubPackets() }
 
     fun BIter.next(num: Int) = (1..num).map { next() }.joinToString("")
     fun BIter.nextValue(num: Int = 1) = next(num).toInt(2)
@@ -66,8 +70,6 @@ class Day16 {
         } while (keepReading)
         return bits.toLong(2)
     }
-
-    fun Packet.withSubPackets(): List<Packet> = listOf(this) + subPackets.flatMap { it.withSubPackets() }
 
     fun String.hexToBits() = trim().flatMap {
         "%4s".format(it.toString().toInt(16).toString(2)).replace(' ', '0').toList()
