@@ -75,14 +75,11 @@ class Day16 {
         else -> nextChunk(nextValue(15)).iterator().readPackets(ALL)
     }
 
-    fun BIter.readPackets(num: Int = 1): List<Packet> {
-        val packets = mutableListOf<Packet>()
+    fun BIter.readPackets(num: Int = 1): List<Packet> = mutableListOf<Packet>().apply {
         for (c in 1..num) {
-            packets.add(nextPacket())
-            if (!hasNext())
-                break
+            add(nextPacket())
+            if (!hasNext()) break
         }
-        return packets
     }
 
     fun BIter.nextChunk(num: Int) = (1..num).map { next() }.joinToString("")
