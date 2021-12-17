@@ -98,9 +98,7 @@ class Day16 {
             7 -> "eq" to (if (operands[0] == operands[1]) 1L else 0L)
             else -> throw IllegalArgumentException("Unknown typeId $typeId")
         }
-        if (debug) {
-            println("$indent$operation: $result")
-        }
+        if (debug) println("$indent$operation: $result")
         return result
     }
 
