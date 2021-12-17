@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test
 import java.lang.IllegalArgumentException
 import kotlin.Int.Companion.MAX_VALUE as ALL
 
-typealias Input = String
-
 typealias BIter = Iterator<Char>
 
 class Day16 {
