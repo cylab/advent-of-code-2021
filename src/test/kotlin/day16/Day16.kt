@@ -1,7 +1,9 @@
 package day16
 
+import io.kotest.assertions.asClue
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
+import java.lang.IllegalArgumentException
 import kotlin.Int.Companion.MAX_VALUE as ALL
 
 typealias Input = String
@@ -22,18 +24,36 @@ class Day16 {
 
     @Test
     fun part1() {
-        "38006F45291200".hexToBits().iterator().readPackets()
         sample.iterator().sumVersions() shouldBe 31
         println("Day  16, Part 1: ${data.iterator().sumVersions()} version sum")
     }
 
     @Test
     fun part2() {
-//        sample.versionSum() shouldBe 23
-//        println("Day  16, Part 2: ${data.versionSum()} version sum")
+        listOf(
+            "C200B40A82" to 3, // sum
+            "04005AC33890" to 54, // mul
+            "880086C3E88112" to 7, // min
+            "CE00C43D881120" to 9, // max
+            "D8005AC2A8F0" to 1, // less than
+            "F600BC2D8F" to 0, // greater than
+            "9C005AC2F8F0" to 0, // equal to
+            "9C0141080250320F1802104A08" to 1, // sum equal to sum
+        ).forEach { (input, expected) ->
+            input.asClue {
+                println(input)
+                input.hexToBits().iterator().nextPacket().eval(debug = true) shouldBe expected
+            }
+        }
+        sample.iterator().evalOperations() shouldBe 54
+        println("Day  16, Part 2: ${data.iterator().evalOperations()} evaluation result")
     }
 
+
     fun BIter.sumVersions() = nextPacket().plusSubPackets().sumOf { it.version }
+
+    fun BIter.evalOperations() = nextPacket().eval()
+
 
     fun BIter.nextPacket(): Packet {
         val version = nextValue(3)
@@ -69,6 +89,25 @@ class Day16 {
 
     fun BIter.nextChunk(num: Int) = (1..num).map { next() }.joinToString("")
     fun BIter.nextValue(num: Int = 1) = nextChunk(num).toInt(2)
+
+    fun Packet.eval(debug: Boolean = false, indent: String = ""): Long {
+        val operands = subPackets.map { it.eval(debug, "$indent  ") }
+        val (operation, result) = when (typeId) {
+            0 -> "sum" to operands.sum()
+            1 -> "mul" to operands.fold(1L) { acc, operand -> acc * operand }
+            2 -> "min" to operands.minOf { it }
+            3 -> "max" to operands.maxOf { it }
+            4 -> "lit" to literal!!
+            5 -> "gt" to (if (operands[0] > operands[1]) 1L else 0L)
+            6 -> "lt" to (if (operands[0] < operands[1]) 1L else 0L)
+            7 -> "eq" to (if (operands[0] == operands[1]) 1L else 0L)
+            else -> throw IllegalArgumentException("Unknown typeId $typeId")
+        }
+        if (debug) {
+            println("$indent$operation: $result")
+        }
+        return result
+    }
 
     fun Packet.plusSubPackets(): List<Packet> = listOf(this) + subPackets.flatMap { it.plusSubPackets() }
 
