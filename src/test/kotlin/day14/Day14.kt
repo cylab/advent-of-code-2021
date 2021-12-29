@@ -56,6 +56,7 @@ class Day14 {
         .let { (templates, rules) ->
             Input(
                 templates[0],
+                // "inline" the inserted symbol, so we can treat a rule like a template during recursive evaluation
                 rules.map { "${it[0]}${it.last()}${it[1]}" }
             )
         }
