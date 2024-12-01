@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.31"
+    kotlin("jvm") version "2.0.21"
     application
 }
 
@@ -25,8 +25,4 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
     testLogging.showStandardStreams = true
-}
-
-tasks.withType<KotlinCompile>() {
-    kotlinOptions.jvmTarget = "1.8"
 }
