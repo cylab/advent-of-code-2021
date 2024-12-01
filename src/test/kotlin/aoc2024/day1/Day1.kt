@@ -19,7 +19,7 @@ class Day1 {
     @Test
     fun part2() {
         sample.similarity() shouldBe 31
-        println("Day  1, Part 2: similarity score is ${data.similarity()}")
+        println("Day  1, Part 2: similarity score is ${data.similarityOptimized()}")
     }
 
 
@@ -33,6 +33,15 @@ class Day1 {
     fun Input.similarity() = this
         .let { (leftColumn, rightColumn) ->
             leftColumn.sumOf { left -> left * rightColumn.count { it == left } }
+        }
+
+    fun Input.similarityOptimized() = this
+        .let { (leftColumn, rightColumn) ->
+            val leftFrequencies = leftColumn.groupingBy { it }.eachCount()
+            val rightFrequencies = rightColumn.groupingBy { it }.eachCount()
+            leftFrequencies
+                .map { (id, count) -> id * count * (rightFrequencies[id] ?: 0) }
+                .sum()
         }
 
 
