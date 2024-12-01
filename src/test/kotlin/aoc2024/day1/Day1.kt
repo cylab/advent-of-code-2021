@@ -30,11 +30,13 @@ class Day1 {
         .sumOf { (left, right) -> abs(left - right) }
 
 
+    // brute force -> O(n^2)
     fun Input.similarity() = this
         .let { (leftColumn, rightColumn) ->
             leftColumn.sumOf { left -> left * rightColumn.count { it == left } }
         }
 
+    // optimized -> O(n)
     fun Input.similarityOptimized() = this
         .let { (leftColumn, rightColumn) ->
             val leftFrequencies = leftColumn.groupingBy { it }.eachCount()
