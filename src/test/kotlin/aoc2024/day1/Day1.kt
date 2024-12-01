@@ -47,7 +47,7 @@ class Day1 {
         }
 
 
-    fun parse(resource: String) = javaClass.getResource(resource)!!
+    fun parse(resource: String): Input = javaClass.getResource(resource)!!
         .readText()
         .lines()
         .filter { it.isNotBlank() }
