@@ -32,7 +32,9 @@ class Day2 {
     fun Input.dampenedSafeReports() = this
         .map { report ->
             val firstCheck = report.checkTransients()
-            val firstUnsafe = firstCheck.withIndex().firstOrNull() { (_, save) -> save != true }?.index
+            val firstUnsafe = firstCheck.withIndex().firstOrNull { (_, save) -> save != true }?.index
+                ?.let { it + 1 } // an unsafe transition has the next value wrong
+
             val finalCheck = when (firstUnsafe) {
                 null -> firstCheck
                 else -> report.filterIndexed { i, _ -> i != firstUnsafe }.checkTransients()
