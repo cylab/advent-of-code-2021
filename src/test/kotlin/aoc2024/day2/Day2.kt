@@ -19,37 +19,50 @@ class Day2 {
 
     @Test
     fun part2() {
-        sample.dampenedSafeReports() shouldBe 4
-        println("Day  2, Part 2: dampened safe reports are ${data.dampenedSafeReports()}")
+        sample.dampenedSafeReportsOptimized() shouldBe 4
+        println("Day  2, Part 2: dampened safe reports are ${data.dampenedSafeReportsOptimized()}")
     }
 
 
     fun Input.safeReports() = this
-        .map { report -> report.checkTransients().any { safe -> safe != true } }
-        .count { safe -> safe != true }
+        .map { report -> report.checkTransitions().all { safe -> safe == true } }
+        .count { safe -> safe == true }
 
 
     fun Input.dampenedSafeReports() = this
         .map { report ->
-            val firstCheck = report.checkTransients()
-            val firstUnsafe = firstCheck.withIndex().firstOrNull { (_, save) -> save != true }?.index
-                ?.let { it + 1 } // an unsafe transition has the next value wrong
-
-            val finalCheck = when (firstUnsafe) {
-                null -> firstCheck
-                else -> report.filterIndexed { i, _ -> i != firstUnsafe }.checkTransients()
-            }
-            finalCheck.any { safe -> safe != true }
+            report.indices
+                .map { skip ->
+                    report.filterIndexed { i, _ -> i != skip }.checkTransitions().all { safe -> safe == true }
+                }
+                .any { safe -> safe == true }
         }
-        .count { safe -> safe != true }
+        .count { safe -> safe == true }
 
 
-    fun List<Int>.checkTransients(): List<Boolean> {
+    // this version reduced the report-variants by first searching for an unsafe transition and removes involved values
+    // the first element also has to be removed in one variant, since it defines the direction of the trend
+    fun Input.dampenedSafeReportsOptimized() = this
+        .mapIndexed { reportIndex, report ->
+            val firstUnsafe = report.checkTransitions().withIndex().firstOrNull { (_, save) -> save != true }?.index
+            when (firstUnsafe) {
+                null -> true
+                else -> listOf(0, firstUnsafe, firstUnsafe + 1)
+                    .map { skip ->
+                        report.filterIndexed { i, _ -> i != skip }.checkTransitions().all { safe -> safe == true }
+                    }
+                    .any { safe -> safe == true }
+            }
+        }
+        .count { safe -> safe == true }
+
+
+    fun List<Int>.checkTransitions(): List<Boolean> {
         val trend = (this[0] - this[1]).sign
         return windowed(2)
-            .map { (current, next) ->
-                val dir = (current - next).sign
-                val amount = abs(current - next)
+            .map { (left, right) ->
+                val dir = (left - right).sign
+                val amount = abs(left - right)
                 dir == trend && amount in 1..3
             }
     }
