@@ -43,7 +43,7 @@ class Day2 {
     // this version reduced the report-variants by first searching for an unsafe transition and removes involved values
     // the first element also has to be removed in one variant, since it defines the direction of the trend
     fun Input.dampenedSafeReportsOptimized() = this
-        .mapIndexed { reportIndex, report ->
+        .map { report ->
             val firstUnsafe = report.checkTransitions().withIndex().firstOrNull { (_, save) -> save != true }?.index
             when (firstUnsafe) {
                 null -> true
