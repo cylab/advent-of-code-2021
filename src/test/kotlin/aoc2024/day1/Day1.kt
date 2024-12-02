@@ -18,7 +18,7 @@ class Day1 {
 
     @Test
     fun part2() {
-        sample.similarity() shouldBe 31
+        sample.similarityOptimized() shouldBe 31
         println("Day  1, Part 2: similarity score is ${data.similarityOptimized()}")
     }
 
