@@ -10,14 +10,18 @@ class Day3 {
 
     @Test
     fun part1() {
-        sample1.sumOfMuls() shouldBe 161
-        println("Day  3, Part 1: sum of multiplications is ${data.sumOfMuls()}")
+//        sample1.sumOfMuls() shouldBe 161
+//        println("Day  3, Part 1: sum of multiplications is ${data.sumOfMuls()}")
+        sample1.sumOfMuls2() shouldBe 161
+        println("Day  3, Part 1: sum of multiplications is ${data.sumOfMuls2()}")
     }
 
     @Test
     fun part2() {
-        sample2.sumOfConditionalMuls() shouldBe 48
-        println("Day  3, Part 2: sum of do multiplications is ${data.sumOfConditionalMuls()}")
+//        sample2.sumOfConditionalMuls() shouldBe 48
+//        println("Day  3, Part 2: sum of do multiplications is ${data.sumOfConditionalMuls()}")
+        sample2.sumOfMuls2(onlyDo = true) shouldBe 48
+        println("Day  3, Part 2: sum of do multiplications is ${data.sumOfMuls2(onlyDo = true)}")
     }
 
     fun String.sumOfMuls() = Regex("""mul\((\d{1,3}),(\d{1,3})\)""")
@@ -42,6 +46,19 @@ class Day3 {
 
     // helper to make sure the string starts with "do()" to avoid missing the first commands
     fun String.prefixedWithDo() = if (startsWith("do()")) this else "do()$this"
+
+    fun String.sumOfMuls2(onlyDo: Boolean = false) = Regex("""(do|don't)\(\)|mul\((\d{1,3}),(\d{1,3})\)""")
+        .findAll(this)
+        .map { it.groupValues.drop(1) + "0" + "0" }
+        .fold(true to 0) { (isDo, sum), (keyword, left, right) ->
+            when {
+                keyword == "do" -> true to sum
+                keyword == "don't" -> false to sum
+                onlyDo && !isDo -> false to sum
+                else -> true to sum + left.toInt() * right.toInt()
+            }
+        }
+        .second
 
     fun parse(resource: String): String = javaClass.getResource(resource)!!
         .readText()
