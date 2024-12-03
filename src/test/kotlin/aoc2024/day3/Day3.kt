@@ -50,11 +50,11 @@ class Day3 {
     fun String.sumOfMuls2(onlyDo: Boolean = false) = Regex("""(do|don't)\(\)|mul\((\d{1,3}),(\d{1,3})\)""")
         .findAll(this)
         .map { it.groupValues.drop(1) + "0" + "0" }
-        .fold(true to 0) { (isDo, sum), (keyword, left, right) ->
+        .fold(true to 0) { (inDo, sum), (keyword, left, right) ->
             when {
                 keyword == "do" -> true to sum
                 keyword == "don't" -> false to sum
-                onlyDo && !isDo -> false to sum
+                onlyDo && !inDo -> false to sum
                 else -> true to sum + left.toInt() * right.toInt()
             }
         }
