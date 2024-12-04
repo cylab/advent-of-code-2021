@@ -32,11 +32,11 @@ class Day4 {
         (1..first().length - 2)
             .flatMap { x -> (1..size - 2).map { y -> Pair(x, y) } }
             .count { (x, y) ->
-                get(y)[x] == 'A' && diagChars(y, x).containsAll(ms) && diagChars(y, x, 1).containsAll(ms)
+                get(y)[x] == 'A' && diagChars(x, y).containsAll(ms) && diagChars(x, y, 1).containsAll(ms)
             }
     }
 
-    fun List<String>.diagChars(y: Int, x: Int, dir: Int = -1) = setOf(get(y - 1)[x + 1 * dir], get(y + 1)[x - 1 * dir])
+    fun List<String>.diagChars(x: Int, y: Int, dir: Int = -1) = setOf(get(y - 1)[x + 1 * dir], get(y + 1)[x - 1 * dir])
 
 
     fun String.columns() = lines().let { lines ->
