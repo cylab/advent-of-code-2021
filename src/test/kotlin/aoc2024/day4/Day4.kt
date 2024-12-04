@@ -25,7 +25,7 @@ class Day4 {
     }
 
 
-    fun Input.numXmas() = (this + columns() + diagonals(4))
+    fun Input.numXmas() = (this + columns() + diagonals(minLength = 4))
         .sumOf { line -> Regex("""(?=XMAS)|(?=SAMX)""").findAll(line).count() }
 
 
