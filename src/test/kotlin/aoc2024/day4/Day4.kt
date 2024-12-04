@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test
 import kotlin.math.max
 import kotlin.math.min
 
+typealias Input = List<String>
+
 class Day4 {
     val sample = parse("sample.txt")
     val data = parse("data.txt")
@@ -23,11 +25,11 @@ class Day4 {
     }
 
 
-    fun String.numXmas() = (lines() + columns() + diagonals(4))
+    fun Input.numXmas() = (this + columns() + diagonals(4))
         .sumOf { line -> Regex("""(?=XMAS)|(?=SAMX)""").findAll(line).count() }
 
 
-    fun String.numCrossMas() = lines().run {
+    fun Input.numCrossMas() = run {
         val ms = setOf('M', 'S')
         (1..first().length - 2)
             .flatMap { x -> (1..size - 2).map { y -> Pair(x, y) } }
@@ -36,18 +38,12 @@ class Day4 {
             }
     }
 
-    fun List<String>.diagChars(x: Int, y: Int, dir: Int = -1) = setOf(get(y - 1)[x + 1 * dir], get(y + 1)[x - 1 * dir])
 
+    fun Input.columns() = first().indices.map { map { line -> line[it] }.joinToString("") }
 
-    fun String.columns() = lines().let { lines ->
-        lines.first().indices.map {
-            lines.map { line -> line[it] }.joinToString("")
-        }
-    }
-
-    fun String.diagonals(minLength: Int = 1) = lines().let { lines ->
-        val xRange = lines.first().indices
-        val yRange = lines.indices
+    fun Input.diagonals(minLength: Int = 1) = run {
+        val xRange = first().indices
+        val yRange = indices
         val maxLength = max(xRange.last, yRange.last) + 1
         val maxDiagonals = xRange.last + yRange.last + 1
 
@@ -58,15 +54,17 @@ class Day4 {
                 generateSequence(Pair(xStart, yStart)) { (x, y) -> Pair(x + dir, y + 1) }
                     .take(maxLength)
                     .filter { (x, y) -> x in xRange && y in yRange }
-                    .map { (x, y) -> lines[y][x] }
+                    .map { (x, y) -> get(y)[x] }
                     .joinToString("")
             }
         }
     }
 
+    fun Input.diagChars(x: Int, y: Int, dir: Int = -1) = setOf(get(y - 1)[x + 1 * dir], get(y + 1)[x - 1 * dir])
 
-    fun parse(resource: String): String = javaClass.getResource(resource)!!
+    fun parse(resource: String): Input = javaClass.getResource(resource)!!
         .readText().trim()
+        .lines()
 }
 
 fun main() = Day2().run {
