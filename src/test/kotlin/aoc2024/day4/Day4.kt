@@ -1,6 +1,5 @@
 package aoc2024.day4
 
-import aoc2024.day2.Day2
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import kotlin.math.max
@@ -42,9 +41,11 @@ class Day4 {
 
     fun Input.diagonals() = Pair(first().indices, indices).let { (xRange, yRange) ->
         setOf(-1, 1).flatMap { dir ->
-            (0..xRange.last + yRange.last + 1).map { offset ->
-                val xStart = max(0, xRange.last * dir) - offset.coerceIn(0..xRange.last) * dir
-                val yStart = max(0, offset - xRange.last)
+            (0..xRange.last + yRange.last + 1).map { diagIndex ->
+                // the diagonal starts either at the top left or top right depending on the direction
+                // and when the startpoint reaches the other corner, it goes down on that side of the grid
+                val xStart = max(0, xRange.last * dir) - diagIndex.coerceIn(0..xRange.last) * dir
+                val yStart = max(0, diagIndex - xRange.last)
                 generateSequence(Pair(xStart, yStart)) { (x, y) -> Pair(x + dir, y + 1) }
                     .takeWhile { (x, y) -> x in xRange && y in yRange }
                     .joinToString("") { (x, y) -> get(y)[x].toString() }
@@ -59,7 +60,7 @@ class Day4 {
         .lines()
 }
 
-fun main() = Day2().run {
+fun main() = Day4().run {
     part1()
     part2()
 }
